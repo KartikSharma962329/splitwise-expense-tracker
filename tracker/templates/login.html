@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Settlé</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   SETTLÉ — LOGIN PAGE
+   PLUM + MINT, INK-ON-PAPER LEDGER MOTIF
+   DJANGO LOGIC PRESERVED
+========================================================= */
+
+:root {
+    --plum: #3B1F3A;
+    --plum-dark: #1E0F22;
+    --plum-light: #52294F;
+    --mint: #73E0AC;
+    --mint-dark: #4FC892;
+    --mint-deep: #278A63;
+    --mint-light: #E7FAF1;
+    --mint-soft: #F4FCF8;
+    --gold: #E8B95B;
+    --cream: #F7F5EE;
+    --white: #FFFFFF;
+    --text: #1D211D;
+    --muted: #767C74;
+    --faint: #ACB1A9;
+    --border: #E4E5DE;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; }
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    overflow: hidden;
+}
+button, input { font-family: inherit; }
+
+.page-shell {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    display: grid;
+    grid-template-columns: 47vw 1fr;
+}
+
+.brand-panel {
+    position: relative;
+    min-width: 0;
+    height: 100%;
+    padding: 5vh 3.6vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    color: var(--white);
+    background:
+        radial-gradient(circle at 10% 6%, rgba(115,224,172,0.20), transparent 42%),
+        radial-gradient(circle at 92% 98%, rgba(232,185,91,0.10), transparent 36%),
+        linear-gradient(165deg, var(--plum) 0%, var(--plum-dark) 100%);
+}
+
+.brand-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.brand-panel::after {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    right: -210px;
+    bottom: -210px;
+    border-radius: 50%;
+    border: 1px solid rgba(115,224,172,0.16);
+    box-shadow: 0 0 0 34px rgba(115,224,172,0.02), 0 0 0 68px rgba(115,224,172,0.014);
+    pointer-events: none;
+}
+
+.page-shell::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 47vw;
+    width: 1px;
+    background-image: linear-gradient(rgba(115,224,172,0.35) 60%, transparent 0%);
+    background-size: 1px 14px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.brand-content { position: relative; z-index: 2; }
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6vh;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.brand-mark {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 13px;
+    background: linear-gradient(145deg, var(--mint), var(--mint-dark));
+    color: var(--plum-dark);
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+.brand-headline {
+    margin-bottom: 16px;
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.9rem, 2.9vw, 2.7rem);
+    font-weight: 600;
+    line-height: 1.14;
+    letter-spacing: -0.02em;
+}
+
+.brand-headline em {
+    font-style: italic;
+    color: var(--mint);
+    font-weight: 500;
+}
+
+.brand-description {
+    max-width: 360px;
+    color: rgba(255,255,255,0.70);
+    font-size: 0.82rem;
+    line-height: 1.75;
+}
+
+.ledger-ticker {
+    position: relative;
+    z-index: 2;
+    margin-top: 4.2vh;
+    height: 28vh;
+    max-height: 270px;
+    border-radius: 4px;
+    background:
+        repeating-linear-gradient(
+            -90deg,
+            transparent, transparent 7px,
+            rgba(255,255,255,0.05) 7px, rgba(255,255,255,0.05) 8px
+        ),
+        rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.12);
+    overflow: hidden;
+}
+
+.ledger-ticker::before, .ledger-ticker::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    height: 34px;
+    z-index: 3;
+    pointer-events: none;
+}
+.ledger-ticker::before { top: 0; background: linear-gradient(to bottom, var(--plum-dark), transparent); }
+.ledger-ticker::after { bottom: 0; background: linear-gradient(to top, var(--plum-dark), transparent); }
+
+.ledger-head {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    border-bottom: 1px dashed rgba(255,255,255,0.14);
+}
+
+.ledger-head span:last-child { color: var(--mint); }
+
+.ledger-track {
+    display: flex;
+    flex-direction: column;
+    animation: scroll-ledger 18s linear infinite;
+}
+
+@keyframes scroll-ledger {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
+}
+
+.ledger-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 15px;
+    border-bottom: 1px dashed rgba(255,255,255,0.10);
+    font-size: 0.72rem;
+}
+
+.ledger-who { display: flex; align-items: center; gap: 9px; color: rgba(255,255,255,0.82); font-weight: 600; }
+.ledger-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--mint); flex-shrink: 0; }
+.ledger-amount { color: var(--mint); font-family: 'Poppins', sans-serif; font-weight: 700; white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) { .ledger-track { animation: none; } }
+
+.brand-stats {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 32px;
+    margin-top: 3.6vh;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+}
+
+.stat-value { color: var(--mint); font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; }
+.stat-label { max-width: 130px; margin-top: 3px; color: rgba(255,255,255,0.52); font-size: 0.6rem; line-height: 1.4; }
+
+.login-panel {
+    position: relative;
+    min-width: 0;
+    height: 100%;
+    padding: 5vh clamp(28px, 4vw, 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background:
+        radial-gradient(circle at 96% 4%, rgba(115,224,172,0.13), transparent 26%),
+        radial-gradient(circle at 4% 98%, rgba(232,185,91,0.08), transparent 24%),
+        var(--white);
+    overflow-y: auto;
+}
+
+.login-inner { width: 100%; }
+
+.panel-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6vh; width: 100%; }
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease, gap 0.2s ease;
+}
+.back-link:hover { color: var(--mint-deep); gap: 9px; }
+
+.floating-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid rgba(79,200,146,0.22);
+    border-radius: 30px;
+    background: var(--mint-soft);
+    color: var(--mint-deep);
+    font-size: 0.62rem;
+    font-weight: 700;
+}
+.floating-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--mint-dark); }
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 7px 13px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(79,200,146,0.20);
+    border-radius: 30px;
+    background: var(--mint-light);
+    color: var(--mint-deep);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--mint-dark); }
+
+.login-title {
+    margin-bottom: 9px;
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.login-subtitle { max-width: 100%; margin-bottom: 30px; color: var(--muted); font-size: 0.82rem; line-height: 1.7; }
+
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border: 1px solid rgba(224,122,79,0.25);
+    border-radius: 12px;
+    background: #FFF5F0;
+    color: #B85F3A;
+    font-size: 0.73rem;
+    font-weight: 600;
+}
+.error-icon {
+    width: 21px; height: 21px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; border-radius: 50%;
+    background: rgba(224,122,79,0.12);
+}
+
+.login-form { width: 100%; }
+.form-group { width: 100%; margin-bottom: 19px; }
+.form-group label { display: block; margin-bottom: 7px; color: #363B36; font-size: 0.72rem; font-weight: 700; }
+
+.input-wrapper { position: relative; width: 100%; }
+
+.input-icon {
+    position: absolute;
+    left: 9px; top: 50%;
+    transform: translateY(-50%);
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    background: var(--mint-light);
+    color: var(--mint-deep);
+    font-size: 0.74rem;
+    pointer-events: none;
+}
+
+.form-input {
+    display: block;
+    width: 100%;
+    height: 53px;
+    padding: 0 46px 0 50px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    outline: none;
+    background: #FCFCFA;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.form-input::placeholder { color: var(--faint); }
+.form-input:focus {
+    border-color: var(--mint-dark);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(79,200,146,0.12);
+}
+
+.toggle-visibility {
+    position: absolute;
+    right: 6px; top: 50%;
+    transform: translateY(-50%);
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    border: none; border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.toggle-visibility:hover { background: var(--mint-light); color: var(--mint-deep); }
+
+.security-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 22px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--mint-soft);
+    color: var(--mint-deep);
+    font-size: 0.65rem;
+    font-weight: 600;
+}
+.security-icon {
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; border-radius: 50%;
+    background: var(--mint);
+    color: var(--plum-dark);
+    font-size: 0.58rem;
+    font-weight: 800;
+}
+
+.form-actions { padding-top: 22px; border-top: 1px dashed #D8D6CC; }
+
+.login-button {
+    position: relative;
+    width: 100%;
+    height: 53px;
+    border: none;
+    border-radius: 13px;
+    background: linear-gradient(135deg, var(--mint), var(--mint-dark));
+    color: var(--plum-dark);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(79,200,146,0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.login-button:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(79,200,146,0.34); }
+.login-button:active { transform: translateY(0); }
+
+.signup-text { margin-top: 22px; text-align: center; color: var(--muted); font-size: 0.73rem; width: 100%; }
+.signup-text a { color: var(--mint-deep); font-weight: 700; }
+.signup-text a:hover { color: var(--plum); }
+
+@media (max-width: 900px) {
+    body { overflow-y: auto; }
+    .page-shell { grid-template-columns: 1fr; height: auto; min-height: 100vh; min-height: 100dvh; }
+    .page-shell::after { display: none; }
+    .brand-panel { height: auto; padding: 40px 32px; }
+    .ledger-ticker { display: none; }
+    .login-panel { padding: 40px 32px 48px; align-items: center; overflow-y: visible; }
+}
+
+@media (max-width: 600px) {
+    .brand-panel { padding: 32px 22px; }
+    .brand-stats { gap: 22px; }
+    .login-panel { padding: 32px 22px 40px; }
+    .login-title { font-size: 1.5rem; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <div class="brand-panel">
+
+        <div class="brand-content">
+
+            <div class="brand">
+                <div class="brand-mark">S</div>
+                Settlé
+            </div>
+
+            <h2 class="brand-headline">
+                Split bills.<br>
+                Settle up.<br>
+                <em>Stay friends.</em>
+            </h2>
+
+            <p class="brand-description">
+                One place for your group's expenses, dues, and chat — no more spreadsheets or awkward reminders.
+            </p>
+
+            <div class="ledger-ticker">
+
+                <div class="ledger-head">
+                    <span>Recent activity</span>
+                    <span>Live</span>
+                </div>
+
+                <div class="ledger-track">
+
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Aisha → Rahul</span>
+                        <span class="ledger-amount">₹450.00</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Trip to Udaipur, split 4 ways</span>
+                        <span class="ledger-amount">₹1,200.00</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Kabir settled up with Meera</span>
+                        <span class="ledger-amount">₹0.00</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Dinner at Cafe Rio, split 3 ways</span>
+                        <span class="ledger-amount">₹840.00</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Priya → You</span>
+                        <span class="ledger-amount">₹220.00</span>
+                    </div>
+
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Aisha → Rahul</span>
+                        <span class="ledger-amount">₹450.00</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Trip to Udaipur, split 4 ways</span>
+                        <span class="ledger-amount">₹1,200.00</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Kabir settled up with Meera</span>
+                        <span class="ledger-amount">₹0.00</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Dinner at Cafe Rio, split 3 ways</span>
+                        <span class="ledger-amount">₹840.00</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-who"><span class="ledger-dot"></span>Priya → You</span>
+                        <span class="ledger-amount">₹220.00</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="brand-stats">
+            <div>
+                <div class="stat-value">Zero</div>
+                <div class="stat-label">Awkward "you owe me" texts</div>
+            </div>
+            <div>
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Transparent group dues</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="login-panel">
+
+        <div class="login-inner">
+
+            <div class="panel-topbar">
+                <a href="{% url 'index' %}" class="back-link">← Back to Index</a>
+                <div class="floating-chip">Split with your group</div>
+            </div>
+
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                Welcome back
+            </div>
+
+            <h1 class="login-title">Login to your account</h1>
+
+            <p class="login-subtitle">Welcome back! Sign in to keep track of your groups, expenses, and payments.</p>
+
+            {% if error %}
+                <p class="error-message">
+                    <span class="error-icon">⚠</span>
+                    {{ error }}
+                </p>
+            {% endif %}
+
+            <form method="POST" action="{% url 'login_view' %}" class="login-form">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>Email:</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉</span>
+                        <input type="email" name="email" placeholder="Enter your email" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password:</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">●</span>
+                        <input type="password" name="password" id="id_password" placeholder="Enter your password" class="form-input" required>
+                        <button type="button" class="toggle-visibility" id="togglePassword" aria-label="Show password">Show</button>
+                    </div>
+                </div>
+
+                <div class="security-note">
+                    <span class="security-icon">✓</span>
+                    Your information is kept secure and private.
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="login-button">Login</button>
+                </div>
+
+            </form>
+
+            <p class="signup-text">
+                New to Settlé?
+                <a href="{% url 'userprofile_add' %}">Create an account</a>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+(function () {
+    var toggleBtn = document.getElementById('togglePassword');
+    var passwordInput = document.getElementById('id_password');
+    if (!toggleBtn || !passwordInput) return;
+
+    toggleBtn.addEventListener('click', function () {
+        var isHidden = passwordInput.type === 'password';
+        passwordInput.type = isHidden ? 'text' : 'password';
+        toggleBtn.textContent = isHidden ? 'Hide' : 'Show';
+        toggleBtn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+    });
+})();
+</script>
+
+</body>
+</html>

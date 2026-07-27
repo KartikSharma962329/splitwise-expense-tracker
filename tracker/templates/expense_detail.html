@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Expense Detail — Settlé</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+<style>
+
+/* =========================================================
+   SETTLÉ — EXPENSE DETAIL
+   PLUM & MINT, CREAM BASE — MATCHES SITE-WIDE SYSTEM
+   RECEIPT / TICKET SIGNATURE THEME
+   DJANGO LOGIC COMPLETELY PRESERVED
+========================================================= */
+
+:root {
+
+    --mint: #5FE0A8;
+    --mint-dark: #3DC48C;
+    --mint-deep: #279A6C;
+
+    --mint-light: #E3FBF0;
+    --mint-soft: #F1FDF7;
+
+    --plum: #3B1F3A;
+    --plum-deep: #26132A;
+
+    --white: #FFFFFF;
+
+    --page-bg: #F7F5EE;
+
+    --text: #1B1D18;
+    --muted: #6E7268;
+    --faint: #A7ABA0;
+
+    --border: #E7E3D6;
+
+    --coral: #E07A4F;
+    --coral-soft: #FCEBE2;
+
+    --gold: #D29F2E;
+    --gold-soft: #FBF1DC;
+
+    --sun: #FFC857;
+
+    --ink: #1B1D18;
+
+}
+
+
+* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    font-family:
+        'Inter',
+        sans-serif;
+
+    background:
+
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(95,224,168,0.16),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(95,224,168,0.12),
+            transparent 25%
+        ),
+
+        linear-gradient(
+            180deg,
+            #FBFAF4,
+            var(--page-bg) 45%,
+            #F2EFE4
+        );
+
+    color:
+        var(--text);
+
+    min-height:
+        100vh;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        24px;
+
+}
+
+
+a {
+
+    text-decoration:
+        none;
+
+    color:
+        inherit;
+
+}
+
+
+button {
+
+    font-family:
+        inherit;
+
+}
+
+
+h2, h3 {
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+}
+
+
+.ticket-num {
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-variant-numeric:
+        tabular-nums;
+
+}
+
+
+::selection {
+
+    background:
+        var(--mint);
+
+    color:
+        var(--plum-deep);
+
+}
+
+
+:focus-visible {
+
+    outline:
+        2px solid var(--mint-dark);
+
+    outline-offset:
+        2px;
+
+    border-radius:
+        6px;
+
+}
+
+
+/* =========================================================
+   ENTRANCE MOTION
+========================================================= */
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.receipt {
+    animation: fadeUp 0.5s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* =========================================================
+   RECEIPT CARD
+========================================================= */
+
+.receipt {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    max-width:
+        520px;
+
+    padding:
+        34px 32px 6px;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        26px 26px 6px 6px;
+
+    box-shadow:
+
+        0 30px 80px
+        rgba(38,19,42,0.16);
+
+    overflow:
+        hidden;
+
+}
+
+
+.receipt::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        220px;
+
+    height:
+        220px;
+
+    top:
+        -130px;
+
+    right:
+        -100px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(95,224,168,0.16);
+
+}
+
+
+.receipt::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        6px;
+
+    top:
+        0;
+
+    bottom:
+        0;
+
+    left:
+        0;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+}
+
+
+.brand {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin-bottom:
+        24px;
+
+    color:
+        var(--plum);
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        0.92rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.02em;
+
+}
+
+
+.brand-mark {
+
+    width:
+        32px;
+
+    height:
+        32px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        11px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.80rem;
+
+    font-weight:
+        800;
+
+    box-shadow:
+
+        0 8px 20px
+        rgba(38,19,42,0.20);
+
+    transform:
+        rotate(-4deg);
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+
+.brand:hover .brand-mark {
+
+    transform:
+        rotate(4deg) scale(1.05);
+
+}
+
+
+/* =========================================================
+   HEADER — description + big ticket amount
+========================================================= */
+
+.receipt-head {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    margin-bottom:
+        20px;
+
+}
+
+
+.receipt-head h2 {
+
+    font-size:
+        1.25rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.02em;
+
+    margin-bottom:
+        12px;
+
+}
+
+
+.amount-line {
+
+    display:
+        flex;
+
+    align-items:
+        baseline;
+
+    gap:
+        4px;
+
+    margin-bottom:
+        14px;
+
+}
+
+
+.amount-line .rupee {
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        1.05rem;
+
+    font-weight:
+        700;
+
+    color:
+        var(--mint-deep);
+
+}
+
+
+.amount-line .value {
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-size:
+        2.1rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.01em;
+
+}
+
+
+/* =========================================================
+   META GRID
+========================================================= */
+
+.meta-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        14px 24px;
+
+    padding:
+        16px 0;
+
+    border-top:
+        1px dashed
+        #DCD7C6;
+
+    border-bottom:
+        1px dashed
+        #DCD7C6;
+
+}
+
+
+.meta-item {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        3px;
+
+}
+
+
+.meta-item .meta-label {
+
+    color:
+        var(--faint);
+
+    font-weight:
+        600;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.04em;
+
+    font-size:
+        0.62rem;
+
+}
+
+
+.meta-item .meta-value {
+
+    color:
+        var(--ink);
+
+    font-weight:
+        600;
+
+    font-size:
+        0.78rem;
+
+}
+
+
+/* =========================================================
+   STATUS PILL
+========================================================= */
+
+.status-pill {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    padding:
+        5px 12px;
+
+    border-radius:
+        20px;
+
+    font-size:
+        0.70rem;
+
+    font-weight:
+        700;
+
+}
+
+
+.status-pill.approved {
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+}
+
+
+.status-pill.pending {
+
+    background:
+        var(--gold-soft);
+
+    color:
+        var(--gold);
+
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    padding:
+        18px 0;
+
+    border-bottom:
+        1px dashed
+        #DCD7C6;
+
+}
+
+
+.section h3 {
+
+    font-size:
+        0.76rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.02em;
+
+    text-transform:
+        uppercase;
+
+    color:
+        var(--plum);
+
+    margin-bottom:
+        12px;
+
+}
+
+
+/* line-item lists — split breakdown + approval status */
+
+.line-list {
+
+    list-style:
+        none;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        9px;
+
+}
+
+
+.line-list li {
+
+    display:
+        flex;
+
+    align-items:
+        baseline;
+
+    gap:
+        8px;
+
+    font-size:
+        0.78rem;
+
+}
+
+
+.line-list li .who {
+
+    color:
+        var(--ink);
+
+    font-weight:
+        600;
+
+}
+
+
+.line-list li::after {
+
+    content:
+        "";
+
+    flex:
+        1;
+
+    border-bottom:
+        1.5px dotted
+        rgba(39,154,108,0.35);
+
+    margin-bottom:
+        3px;
+
+}
+
+
+.line-list li .amt {
+
+    order:
+        3;
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-weight:
+        700;
+
+    color:
+        var(--mint-deep);
+
+}
+
+
+.line-list li .tick {
+
+    order:
+        3;
+
+    font-weight:
+        700;
+
+}
+
+
+.line-list li .tick.yes {
+
+    color:
+        var(--mint-deep);
+
+}
+
+
+.line-list li .tick.no {
+
+    color:
+        var(--faint);
+
+}
+
+
+/* =========================================================
+   APPROVAL ACTION
+========================================================= */
+
+.approve-section {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    padding:
+        20px 0;
+
+}
+
+
+.btn {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        100%;
+
+    padding:
+        13px 20px;
+
+    border:
+        none;
+
+    border-radius:
+        20px;
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        all 0.25s ease;
+
+}
+
+
+.btn:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.btn-approve {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    box-shadow:
+
+        0 7px 18px
+        rgba(0,0,0,0.18);
+
+}
+
+
+.btn-undo {
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+    border:
+        1px solid
+        var(--mint-dark);
+
+}
+
+
+.not-in-split {
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.78rem;
+
+    line-height:
+        1.6;
+
+}
+
+
+/* =========================================================
+   FOOTER LINK + PERFORATION
+========================================================= */
+
+.receipt-foot {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    padding:
+        18px 0 14px;
+
+    text-align:
+        center;
+
+}
+
+
+.receipt-foot a {
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        700;
+
+}
+
+
+.receipt-foot a:hover {
+
+    text-decoration:
+        underline;
+
+}
+
+
+/* tear perforation strip at the very bottom of the card */
+
+.tear {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    height:
+        14px;
+
+    background-image:
+
+        radial-gradient(
+            circle at 7px 0,
+            var(--page-bg) 7px,
+            transparent 7.5px
+        );
+
+    background-size:
+        18px 14px;
+
+    background-repeat:
+        repeat-x;
+
+}
+
+
+@media(max-width:520px) {
+
+    .receipt {
+
+        padding:
+            26px 20px 6px;
+
+    }
+
+
+    .meta-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="receipt">
+
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            S
+        </div>
+
+        Settlé
+
+    </div>
+
+
+
+    <!-- =================================================
+         HEADER
+         DJANGO LOGIC PRESERVED
+    ================================================== -->
+
+    <div class="receipt-head">
+
+        <h2>{{ expense.description }}</h2>
+
+        <div class="amount-line">
+            <span class="rupee">₹</span>
+            <span class="value ticket-num">{% widthratio expense.amount 100 1 %}</span>
+        </div>
+
+
+        <div class="meta-grid">
+
+            <div class="meta-item">
+                <span class="meta-label">Paid by</span>
+                <span class="meta-value">{{ expense.paid_by }}</span>
+            </div>
+
+            <div class="meta-item">
+                <span class="meta-label">Date</span>
+                <span class="meta-value ticket-num">{{ expense.expense_date }}</span>
+            </div>
+
+            <div class="meta-item">
+                <span class="meta-label">Split type</span>
+                <span class="meta-value">{{ expense.split_type }}</span>
+            </div>
+
+            <div class="meta-item">
+                <span class="meta-label">Status</span>
+                <span class="meta-value">
+                    {% if expense.status == 'approved' %}
+                        <span class="status-pill approved">✅ Approved</span>
+                    {% else %}
+                        <span class="status-pill pending">⬜ Pending</span>
+                    {% endif %}
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SPLIT BREAKDOWN
+         DJANGO LOGIC PRESERVED
+    ================================================== -->
+
+    <div class="section">
+
+        <h3>Split Breakdown</h3>
+
+        <ul class="line-list">
+
+            {% for email, share in split_data.items %}
+
+                <li>
+                    <span class="who">{{ email }}</span>
+                    <span class="amt">₹{% widthratio share 100 1 %}</span>
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+
+
+    <!-- =================================================
+         APPROVAL STATUS
+         DJANGO LOGIC PRESERVED
+    ================================================== -->
+
+    <div class="section">
+
+        <h3>Approval Status</h3>
+
+        <ul class="line-list">
+
+            {% for approval in approval_list %}
+
+                <li>
+                    <span class="who">{{ approval.email }}</span>
+                    {% if approval.approved %}
+                        <span class="tick yes">✅ Approved</span>
+                    {% else %}
+                        <span class="tick no">⬜ Not yet approved</span>
+                    {% endif %}
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+
+
+    <!-- =================================================
+         MY APPROVAL ACTION
+         DJANGO LOGIC PRESERVED
+    ================================================== -->
+
+    <div class="approve-section">
+
+        {% if my_approval %}
+
+            <form method="POST" action="{% url 'toggle_expense_approval' expense.expense_id %}">
+
+                {% csrf_token %}
+
+                {% if my_approval.approved %}
+                    <button type="submit" class="btn btn-undo">✅ I approved this (click to undo)</button>
+                {% else %}
+                    <button type="submit" class="btn btn-approve">⬜ Approve this expense</button>
+                {% endif %}
+
+            </form>
+
+        {% else %}
+
+            <p class="not-in-split">You are not part of this expense's split.</p>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <div class="tear"></div>
+
+
+    <!-- =================================================
+         BACK LINK
+         DJANGO LOGIC PRESERVED
+    ================================================== -->
+
+    <div class="receipt-foot">
+
+        <a href="{% url 'group_home' %}">← Back to Group</a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

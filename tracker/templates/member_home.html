@@ -1,0 +1,3449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Member Dashboard — Settlé</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<style>
+
+/* =========================================================
+   SETTLÉ — MEMBER HOME DASHBOARD
+   PLUM & MINT, CREAM BASE
+   DJANGO LOGIC UNCHANGED
+   FULLY RESPONSIVE — DESKTOP / TABLET / MOBILE
+========================================================= */
+
+:root {
+
+    --mint: #5FE0A8;
+    --mint-dark: #3DC48C;
+    --mint-deep: #279A6C;
+
+    --mint-light: #E3FBF0;
+    --mint-soft: #F1FDF7;
+
+    --plum: #3B1F3A;
+    --plum-deep: #26132A;
+
+    --white: #FFFFFF;
+
+    --page-bg: #F7F5EE;
+    --sidebar-bg: #FBFAF4;
+    --main-bg: #FFFFFF;
+    --right-bg: #FBFAF4;
+
+    --text: #1B1D18;
+    --muted: #6E7268;
+    --faint: #A7ABA0;
+
+    --border: #E7E3D6;
+
+    --coral: #E07A4F;
+    --coral-soft: #FCEBE2;
+
+    --gold: #D29F2E;
+    --gold-soft: #FBF1DC;
+
+    --sun: #FFC857;
+
+    --shadow: 0 20px 55px rgba(38,19,42,0.10);
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px;
+
+    background:
+        radial-gradient(circle at 10% 10%, rgba(95,224,168,0.16), transparent 25%),
+        radial-gradient(circle at 90% 90%, rgba(95,224,168,0.12), transparent 25%),
+        linear-gradient(180deg, #FBFAF4, var(--page-bg) 45%, #F2EFE4);
+
+    overflow-x: hidden;
+
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+h1,
+h3 {
+    font-family: 'Poppins', sans-serif;
+}
+
+::selection {
+    background: var(--mint);
+    color: var(--plum-deep);
+}
+
+:focus-visible {
+    outline: 2px solid var(--mint-dark);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+
+/* =========================================================
+   ENTRANCE MOTION
+========================================================= */
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+.hero,
+.dropdown-wrapper,
+.right-block {
+
+    animation: fadeUp 0.5s ease both;
+
+}
+
+.hero {
+    animation-delay: 0s;
+}
+
+.dropdown-wrapper:nth-of-type(2) {
+    animation-delay: 0.08s;
+}
+
+.dropdown-wrapper:nth-of-type(3) {
+    animation-delay: 0.14s;
+}
+
+.right-block:nth-of-type(1) {
+    animation-delay: 0.10s;
+}
+
+.right-block:nth-of-type(2) {
+    animation-delay: 0.16s;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+
+    }
+
+}
+
+
+/* =========================================================
+   MAIN APP CONTAINER
+========================================================= */
+
+.shell {
+
+    width: 100%;
+    max-width: 1500px;
+    min-height: calc(100vh - 48px);
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        210px
+        minmax(0, 1fr)
+        250px;
+
+    background: var(--main-bg);
+
+    border: 1px solid var(--border);
+    border-radius: 26px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 30px 80px rgba(38,19,42,0.14);
+
+}
+
+
+/* =========================================================
+   LEFT SIDEBAR
+========================================================= */
+
+.side {
+
+    position: relative;
+
+    padding: 32px 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--plum),
+            var(--plum-deep)
+        );
+
+    overflow: hidden;
+
+}
+
+.side::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    top: -100px;
+    left: -100px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(95,224,168,0.10);
+
+}
+
+.side::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    left: -110px;
+    bottom: -120px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(95,224,168,0.22),
+            transparent 68%
+        );
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.side-brand {
+
+    position: relative;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 45px;
+
+    color: #FFFFFF;
+
+    font-family: 'Poppins', sans-serif;
+
+    font-size: 1.05rem;
+
+    font-weight: 700;
+
+    letter-spacing: -0.02em;
+
+}
+
+.side-brand-mark {
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color: var(--plum-deep);
+
+    font-size: 0.95rem;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.22);
+
+    transform: rotate(-4deg);
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+.side-brand:hover .side-brand-mark {
+
+    transform:
+        rotate(4deg)
+        scale(1.05);
+
+}
+
+
+/* =========================================================
+   SIDEBAR LABEL
+========================================================= */
+
+.side-label {
+
+    position: relative;
+
+    z-index: 3;
+
+    margin:
+        22px 12px 11px;
+
+    color:
+        rgba(255,255,255,0.45);
+
+    font-size:
+        0.70rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.09em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+/* =========================================================
+   SIDEBAR ITEM
+========================================================= */
+
+.side-item {
+
+    position: relative;
+
+    z-index: 3;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding:
+        10px 12px;
+
+    margin-bottom:
+        5px;
+
+    border-radius:
+        13px;
+
+    color:
+        rgba(255,255,255,0.68);
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        500;
+
+    transition:
+        all 0.22s ease;
+
+}
+
+.side-item:hover {
+
+    color:
+        #FFFFFF;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    transform:
+        translateX(3px);
+
+}
+
+.side-dot {
+
+    width: 6px;
+    height: 6px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        currentColor;
+
+}
+
+.side-item.active {
+
+    color:
+        var(--plum-deep);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.20);
+
+    font-weight:
+        700;
+
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.main {
+
+    min-width: 0;
+
+    padding: 30px;
+
+    background:
+        var(--main-bg);
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    margin-bottom: 25px;
+
+    min-width: 0;
+
+}
+
+.topbar-search {
+
+    flex: 1;
+
+    max-width: 400px;
+
+    min-height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        0 17px;
+
+    background:
+        var(--mint-soft);
+
+    border:
+        1px solid var(--mint-light);
+
+    border-radius:
+        20px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.84rem;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+}
+
+.topbar-search::before {
+
+    content:
+        "⌕";
+
+    margin-right:
+        9px;
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        1.05rem;
+
+    flex-shrink: 0;
+
+}
+
+.topbar-user {
+
+    margin-left:
+        auto;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+
+    min-width:
+        0;
+
+    max-width:
+        45%;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+.avatar {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        700;
+
+    box-shadow:
+        0 0 0 3px var(--mint-light),
+        0 0 0 4px var(--mint-dark);
+
+}
+
+
+/* =========================================================
+   WELCOME HERO
+========================================================= */
+
+.hero {
+
+    position: relative;
+
+    min-height:
+        190px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        25px;
+
+    padding:
+        30px;
+
+    margin-bottom:
+        25px;
+
+    border-radius:
+        20px;
+
+    overflow:
+        hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--plum),
+            var(--plum-deep)
+        );
+
+    box-shadow:
+        0 18px 40px rgba(38,19,42,0.20);
+
+}
+
+.hero::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        260px;
+
+    height:
+        260px;
+
+    right:
+        -80px;
+
+    top:
+        -150px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255,200,87,0.14);
+
+}
+
+.hero::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        320px;
+
+    height:
+        320px;
+
+    right:
+        -110px;
+
+    bottom:
+        -160px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(95,224,168,0.20),
+            transparent 70%
+        );
+
+}
+
+.hero-content {
+
+    position:
+        relative;
+
+    z-index:
+        3;
+
+    min-width:
+        0;
+
+}
+
+.hero h1 {
+
+    font-size:
+        1.65rem;
+
+    line-height:
+        1.25;
+
+    font-weight:
+        700;
+
+    margin-bottom:
+        9px;
+
+    letter-spacing:
+        -0.03em;
+
+    color:
+        #FFFFFF;
+
+    word-break:
+        break-word;
+
+}
+
+.hero p {
+
+    max-width:
+        500px;
+
+    color:
+        rgba(255,255,255,0.62);
+
+    font-size:
+        0.86rem;
+
+    line-height:
+        1.55;
+
+}
+
+
+/* =========================================================
+   HERO ACTIONS
+========================================================= */
+
+.hero-actions {
+
+    position:
+        relative;
+
+    z-index:
+        4;
+
+    display:
+        flex;
+
+    gap:
+        9px;
+
+    flex-wrap:
+        wrap;
+
+    flex-shrink:
+        0;
+
+}
+
+.hero-actions a {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        38px;
+
+    padding:
+        8px 19px;
+
+    border-radius:
+        20px;
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        700;
+
+    transition:
+        all 0.22s ease;
+
+    white-space:
+        nowrap;
+
+}
+
+.hero-actions a:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+.btn-primary {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    box-shadow:
+        0 7px 17px rgba(0,0,0,0.22);
+
+}
+
+.btn-outline {
+
+    background:
+        rgba(255,255,255,0.08);
+
+    border:
+        1px solid rgba(255,255,255,0.30);
+
+    color:
+        #FFFFFF;
+
+}
+
+
+/* =========================================================
+   DROPDOWN SECTION
+========================================================= */
+
+.dropdown-wrapper {
+
+    width:
+        100%;
+
+    margin-bottom:
+        18px;
+
+}
+
+.dropdown-toggle {
+
+    width:
+        100%;
+
+    min-height:
+        48px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    padding:
+        13px 17px;
+
+    border:
+        1px solid var(--mint-light);
+
+    border-radius:
+        15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint-soft),
+            var(--mint-light)
+        );
+
+    color:
+        var(--mint-deep);
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        0.90rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 14px rgba(95,224,168,0.10);
+
+    transition:
+        all 0.22s ease;
+
+    text-align:
+        left;
+
+}
+
+.dropdown-toggle:hover {
+
+    border-color:
+        var(--mint-dark);
+
+    transform:
+        translateY(-1px);
+
+}
+
+.dropdown-arrow {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        25px;
+
+    height:
+        25px;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        #FFFFFF;
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.62rem;
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+.dropdown-arrow.rotate {
+
+    transform:
+        rotate(180deg);
+
+}
+
+.dropdown-content {
+
+    display:
+        none;
+
+    margin-top:
+        13px;
+
+    animation:
+        dropdownOpen 0.25s ease;
+
+    min-width:
+        0;
+
+}
+
+.dropdown-content.show {
+
+    display:
+        block;
+
+}
+
+@keyframes dropdownOpen {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(-8px);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   PROFILE CARD
+========================================================= */
+
+.profile-card {
+
+    padding:
+        20px;
+
+    background:
+        var(--sidebar-bg);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        16px;
+
+    min-width:
+        0;
+
+}
+
+.profile-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        13px;
+
+}
+
+.profile-item {
+
+    padding:
+        13px 15px;
+
+    background:
+        #FFFFFF;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        12px;
+
+    min-width:
+        0;
+
+}
+
+.profile-label {
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        600;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.04em;
+
+    margin-bottom:
+        5px;
+
+}
+
+.profile-value {
+
+    color:
+        var(--text);
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        600;
+
+    word-break:
+        break-word;
+
+    overflow-wrap:
+        anywhere;
+
+}
+
+.profile-bio {
+
+    grid-column:
+        1 / -1;
+
+}
+
+.profile-actions {
+
+    margin-top:
+        18px;
+
+}
+
+.profile-actions a {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        38px;
+
+    padding:
+        8px 19px;
+
+    border-radius:
+        20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        700;
+
+    box-shadow:
+        0 7px 17px rgba(95,224,168,0.30);
+
+    transition:
+        transform 0.2s ease;
+
+}
+
+.profile-actions a:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =========================================================
+   GROUPS
+========================================================= */
+
+.groups-list {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        14px;
+
+}
+
+.group-card {
+
+    position:
+        relative;
+
+    padding:
+        18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #FFFFFF,
+            var(--mint-soft)
+        );
+
+    border:
+        1px solid var(--mint-light);
+
+    border-radius:
+        14px;
+
+    overflow:
+        hidden;
+
+    min-width:
+        0;
+
+    transition:
+        all 0.22s ease;
+
+}
+
+.group-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        0;
+
+    width:
+        100%;
+
+    height:
+        3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+}
+
+.group-card:hover {
+
+    transform:
+        translateY(-3px)
+        rotate(-0.4deg);
+
+    box-shadow:
+        0 12px 25px rgba(38,19,42,0.10);
+
+    border-color:
+        var(--mint-dark);
+
+}
+
+.group-card-title {
+
+    color:
+        var(--text);
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        0.90rem;
+
+    font-weight:
+        700;
+
+    margin-bottom:
+        10px;
+
+    word-break:
+        break-word;
+
+}
+
+.group-info {
+
+    margin-bottom:
+        5px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.76rem;
+
+    word-break:
+        break-word;
+
+    overflow-wrap:
+        anywhere;
+
+}
+
+.group-info b {
+
+    color:
+        var(--mint-deep);
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    overflow-wrap:
+        anywhere;
+
+}
+
+.group-card form {
+
+    margin-top:
+        12px;
+
+}
+
+.group-card button {
+
+    min-height:
+        38px;
+
+    padding:
+        8px 17px;
+
+    border:
+        none;
+
+    border-radius:
+        20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.76rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 6px 15px rgba(95,224,168,0.24);
+
+    transition:
+        transform 0.2s ease;
+
+}
+
+.group-card button:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+.empty-state {
+
+    padding:
+        16px 12px;
+
+    color:
+        var(--faint);
+
+    font-size:
+        0.84rem;
+
+    line-height:
+        1.55;
+
+    text-align:
+        center;
+
+    border:
+        1px dashed var(--border);
+
+    border-radius:
+        12px;
+
+    background:
+        var(--mint-soft);
+
+}
+
+.empty-state::before {
+
+    content:
+        "🧭";
+
+    display:
+        block;
+
+    margin-bottom:
+        5px;
+
+    font-size:
+        1.1rem;
+
+    opacity:
+        0.7;
+
+}
+
+
+/* =========================================================
+   RIGHT SIDEBAR
+========================================================= */
+
+.right {
+
+    padding:
+        30px 17px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--right-bg),
+            #F5F2E7
+        );
+
+    border-left:
+        1px solid var(--border);
+
+    overflow-y:
+        auto;
+
+    overflow-x:
+        hidden;
+
+    min-width:
+        0;
+
+}
+
+.right-block {
+
+    margin-bottom:
+        20px;
+
+    padding:
+        14px;
+
+    background:
+        rgba(255,255,255,0.75);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        16px;
+
+}
+
+.right-head {
+
+    margin-bottom:
+        9px;
+
+}
+
+.right-head h3 {
+
+    font-size:
+        0.90rem;
+
+    font-weight:
+        700;
+
+}
+
+.quick-item {
+
+    padding:
+        11px 0;
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+.quick-item:last-child {
+
+    border-bottom:
+        none;
+
+}
+
+.quick-title {
+
+    font-size:
+        0.80rem;
+
+    font-weight:
+        600;
+
+}
+
+.quick-meta {
+
+    margin-top:
+        4px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.72rem;
+
+    line-height:
+        1.5;
+
+    overflow-wrap:
+        anywhere;
+
+}
+
+.quick-button {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        100%;
+
+    min-height:
+        38px;
+
+    padding:
+        9px;
+
+    margin-top:
+        8px;
+
+    text-align:
+        center;
+
+    border-radius:
+        11px;
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.74rem;
+
+    font-weight:
+        700;
+
+    transition:
+        all 0.2s ease;
+
+}
+
+.quick-button:hover {
+
+    background:
+        var(--mint-dark);
+
+    color:
+        #FFFFFF;
+
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+}
+
+::-webkit-scrollbar-track {
+
+    background:
+        transparent;
+
+}
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        #C9EBDA;
+
+    border-radius:
+        10px;
+
+}
+
+
+/* =========================================================
+   TABLET
+   1150px AND BELOW
+========================================================= */
+
+@media (max-width: 1150px) {
+
+    body {
+
+        padding:
+            18px;
+
+    }
+
+    .shell {
+
+        grid-template-columns:
+            190px
+            minmax(0, 1fr);
+
+    }
+
+    .right {
+
+        display:
+            none;
+
+    }
+
+    .main {
+
+        padding:
+            25px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL TABLET
+   850px AND BELOW
+========================================================= */
+
+@media (max-width: 850px) {
+
+    body {
+
+        padding:
+            12px;
+
+    }
+
+    .shell {
+
+        display:
+            block;
+
+        width:
+            100%;
+
+        min-height:
+            auto;
+
+        border-radius:
+            20px;
+
+        overflow:
+            hidden;
+
+    }
+
+
+    /* -----------------------------------------
+       MOBILE / TABLET NAVIGATION
+    ----------------------------------------- */
+
+    .side {
+
+        display:
+            flex;
+
+        flex-wrap:
+            wrap;
+
+        align-items:
+            center;
+
+        gap:
+            7px;
+
+        padding:
+            16px;
+
+        overflow:
+            hidden;
+
+    }
+
+    .side-brand {
+
+        width:
+            100%;
+
+        flex-basis:
+            100%;
+
+        margin-bottom:
+            8px;
+
+    }
+
+    .side-label {
+
+        display:
+            none;
+
+    }
+
+    .side-item {
+
+        display:
+            inline-flex;
+
+        align-items:
+            center;
+
+        width:
+            auto;
+
+        margin:
+            0;
+
+        padding:
+            8px 12px;
+
+        border-radius:
+            12px;
+
+        font-size:
+            0.78rem;
+
+    }
+
+    .side-item:hover {
+
+        transform:
+            translateY(-1px);
+
+    }
+
+
+    /* -----------------------------------------
+       MAIN
+    ----------------------------------------- */
+
+    .main {
+
+        padding:
+            20px;
+
+        overflow:
+            visible;
+
+    }
+
+
+    /* -----------------------------------------
+       TOPBAR
+    ----------------------------------------- */
+
+    .topbar {
+
+        margin-bottom:
+            20px;
+
+    }
+
+    .topbar-search {
+
+        max-width:
+            none;
+
+    }
+
+
+    /* -----------------------------------------
+       RIGHT SIDEBAR
+    ----------------------------------------- */
+
+    .right {
+
+        display:
+            block;
+
+        border-left:
+            none;
+
+        border-top:
+            1px solid var(--border);
+
+        padding:
+            22px 20px;
+
+        overflow:
+            visible;
+
+    }
+
+
+    /* -----------------------------------------
+       HERO
+    ----------------------------------------- */
+
+    .hero {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            20px;
+
+    }
+
+    .hero-content {
+
+        width:
+            100%;
+
+    }
+
+    .hero p {
+
+        max-width:
+            100%;
+
+    }
+
+    .hero-actions {
+
+        width:
+            100%;
+
+    }
+
+
+    /* -----------------------------------------
+       PROFILE
+    ----------------------------------------- */
+
+    .profile-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .profile-bio {
+
+        grid-column:
+            auto;
+
+    }
+
+
+    /* -----------------------------------------
+       GROUPS
+    ----------------------------------------- */
+
+    .groups-list {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   600px AND BELOW
+========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding:
+            7px;
+
+    }
+
+    .shell {
+
+        border-radius:
+            17px;
+
+    }
+
+
+    /* -----------------------------------------
+       SIDEBAR
+    ----------------------------------------- */
+
+    .side {
+
+        padding:
+            14px;
+
+        gap:
+            6px;
+
+    }
+
+    .side-brand {
+
+        margin-bottom:
+            7px;
+
+        font-size:
+            1rem;
+
+    }
+
+    .side-brand-mark {
+
+        width:
+            34px;
+
+        height:
+            34px;
+
+    }
+
+    .side-item {
+
+        flex:
+            1 1 auto;
+
+        justify-content:
+            center;
+
+        padding:
+            9px 10px;
+
+        font-size:
+            0.74rem;
+
+        min-width:
+            0;
+
+    }
+
+    .side-dot {
+
+        width:
+            5px;
+
+        height:
+            5px;
+
+    }
+
+
+    /* -----------------------------------------
+       MAIN
+    ----------------------------------------- */
+
+    .main {
+
+        padding:
+            15px;
+
+    }
+
+
+    /* -----------------------------------------
+       TOPBAR
+    ----------------------------------------- */
+
+    .topbar {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr auto;
+
+        gap:
+            12px;
+
+        margin-bottom:
+            17px;
+
+    }
+
+    .topbar-search {
+
+        grid-column:
+            1 / -1;
+
+        grid-row:
+            2;
+
+        width:
+            100%;
+
+        max-width:
+            none;
+
+        min-height:
+            42px;
+
+    }
+
+    .topbar-user {
+
+        grid-column:
+            2;
+
+        grid-row:
+            1;
+
+        max-width:
+            100%;
+
+    }
+
+
+    /* -----------------------------------------
+       HERO
+    ----------------------------------------- */
+
+    .hero {
+
+        padding:
+            20px;
+
+        min-height:
+            0;
+
+        margin-bottom:
+            18px;
+
+        border-radius:
+            17px;
+
+        gap:
+            18px;
+
+    }
+
+    .hero h1 {
+
+        font-size:
+            1.30rem;
+
+        line-height:
+            1.3;
+
+    }
+
+    .hero p {
+
+        font-size:
+            0.80rem;
+
+        line-height:
+            1.6;
+
+    }
+
+    .hero-actions {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            9px;
+
+    }
+
+    .hero-actions a {
+
+        width:
+            100%;
+
+        min-height:
+            42px;
+
+    }
+
+
+    /* -----------------------------------------
+       DROPDOWNS
+    ----------------------------------------- */
+
+    .dropdown-wrapper {
+
+        margin-bottom:
+            14px;
+
+    }
+
+    .dropdown-toggle {
+
+        min-height:
+            46px;
+
+        padding:
+            11px 13px;
+
+        font-size:
+            0.82rem;
+
+        border-radius:
+            13px;
+
+    }
+
+
+    /* -----------------------------------------
+       PROFILE CARD
+    ----------------------------------------- */
+
+    .profile-card {
+
+        padding:
+            12px;
+
+        border-radius:
+            13px;
+
+    }
+
+    .profile-grid {
+
+        gap:
+            9px;
+
+    }
+
+    .profile-item {
+
+        padding:
+            11px 12px;
+
+        border-radius:
+            10px;
+
+    }
+
+    .profile-label {
+
+        font-size:
+            0.63rem;
+
+    }
+
+    .profile-value {
+
+        font-size:
+            0.76rem;
+
+        line-height:
+            1.5;
+
+    }
+
+    .profile-actions {
+
+        margin-top:
+            14px;
+
+    }
+
+    .profile-actions a {
+
+        width:
+            100%;
+
+        min-height:
+            42px;
+
+    }
+
+
+    /* -----------------------------------------
+       GROUP CARDS
+    ----------------------------------------- */
+
+    .groups-list {
+
+        gap:
+            10px;
+
+    }
+
+    .group-card {
+
+        padding:
+            15px;
+
+        border-radius:
+            12px;
+
+    }
+
+    .group-card-title {
+
+        font-size:
+            0.84rem;
+
+    }
+
+    .group-info {
+
+        font-size:
+            0.72rem;
+
+        line-height:
+            1.55;
+
+    }
+
+    .group-card button {
+
+        width:
+            100%;
+
+        min-height:
+            42px;
+
+    }
+
+
+    /* -----------------------------------------
+       RIGHT SIDEBAR
+    ----------------------------------------- */
+
+    .right {
+
+        padding:
+            17px 14px;
+
+    }
+
+    .right-block {
+
+        padding:
+            13px;
+
+        margin-bottom:
+            14px;
+
+        border-radius:
+            13px;
+
+    }
+
+    .quick-button {
+
+        min-height:
+            42px;
+
+    }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL PHONES
+   400px AND BELOW
+========================================================= */
+
+@media (max-width: 400px) {
+
+    body {
+
+        padding:
+            5px;
+
+    }
+
+    .shell {
+
+        border-radius:
+            14px;
+
+    }
+
+    .side {
+
+        padding:
+            11px;
+
+    }
+
+    .side-brand {
+
+        font-size:
+            0.92rem;
+
+    }
+
+    .side-brand-mark {
+
+        width:
+            32px;
+
+        height:
+            32px;
+
+        border-radius:
+            10px;
+
+    }
+
+    .side-item {
+
+        padding:
+            8px 7px;
+
+        font-size:
+            0.68rem;
+
+        gap:
+            5px;
+
+    }
+
+    .main {
+
+        padding:
+            12px;
+
+    }
+
+    .topbar {
+
+        gap:
+            9px;
+
+    }
+
+    .topbar-user {
+
+        font-size:
+            0.72rem;
+
+    }
+
+    .avatar {
+
+        width:
+            32px;
+
+        height:
+            32px;
+
+        font-size:
+            0.65rem;
+
+    }
+
+    .hero {
+
+        padding:
+            16px;
+
+    }
+
+    .hero h1 {
+
+        font-size:
+            1.12rem;
+
+    }
+
+    .hero p {
+
+        font-size:
+            0.76rem;
+
+    }
+
+    .dropdown-toggle {
+
+        font-size:
+            0.78rem;
+
+    }
+
+    .profile-card {
+
+        padding:
+            10px;
+
+    }
+
+    .profile-item {
+
+        padding:
+            10px;
+
+    }
+
+    .profile-value {
+
+        font-size:
+            0.70rem;
+
+    }
+
+    .right {
+
+        padding:
+            14px 11px;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   340px AND BELOW
+========================================================= */
+
+@media (max-width: 340px) {
+
+    .side-item {
+
+        flex:
+            1 1 100%;
+
+        justify-content:
+            flex-start;
+
+    }
+
+    .topbar {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .topbar-user {
+
+        grid-column:
+            1;
+
+        grid-row:
+            1;
+
+        justify-self:
+            start;
+
+    }
+
+    .topbar-search {
+
+        grid-column:
+            1;
+
+        grid-row:
+            2;
+
+    }
+
+    .hero-actions a {
+
+        font-size:
+            0.76rem;
+
+    }
+
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   IMPROVES MOBILE TAP EXPERIENCE
+========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .side-item,
+    .hero-actions a,
+    .profile-actions a,
+    .group-card button,
+    .quick-button,
+    .dropdown-toggle {
+
+        -webkit-tap-highlight-color:
+            transparent;
+
+    }
+
+    .side-item:hover,
+    .hero-actions a:hover,
+    .profile-actions a:hover,
+    .group-card button:hover,
+    .quick-button:hover,
+    .dropdown-toggle:hover {
+
+        transform:
+            none;
+
+    }
+
+}
+
+
+/* =========================================================
+   PREVENT LONG TEXT FROM BREAKING MOBILE LAYOUT
+========================================================= */
+
+.profile-value,
+.group-card-title,
+.group-info,
+.quick-meta {
+
+    max-width:
+        100%;
+
+}
+
+
+/* =========================================================
+   MOBILE SAFETY
+========================================================= */
+
+img,
+svg,
+video,
+iframe {
+
+    max-width:
+        100%;
+
+    height:
+        auto;
+
+}
+
+form {
+
+    max-width:
+        100%;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="shell">
+
+
+<!-- =========================================================
+     LEFT SIDEBAR
+========================================================= -->
+
+<div class="side">
+
+
+    <div class="side-brand">
+
+        <div class="side-brand-mark">
+            S
+        </div>
+
+        Settlé
+
+    </div>
+
+
+    <div class="side-label">
+        Member
+    </div>
+
+
+    <div class="side-item active">
+
+        <span class="side-dot"></span>
+
+        Dashboard
+
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        My Profile
+
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        My Groups
+
+    </div>
+
+
+    <div class="side-label">
+        Account
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        Split Expenses
+
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        Payments
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<div class="main">
+
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+
+        <div class="topbar-search">
+
+            Member Dashboard
+
+        </div>
+
+
+        <div class="topbar-user">
+
+
+            <div class="avatar">
+
+                {{ profile.name|slice:":2"|upper }}
+
+            </div>
+
+
+            {{ profile.name }}
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <div class="hero">
+
+
+        <div class="hero-content">
+
+
+            <h1>
+
+                Welcome, {{ profile.name }}
+
+            </h1>
+
+
+            <p>
+
+                Manage your profile, create or join groups,
+                and keep your shared expenses organized
+                with Settlé.
+
+            </p>
+
+
+        </div>
+
+
+        <div class="hero-actions">
+
+
+            <a
+                href="{% url 'create_group' %}"
+                class="btn-primary"
+            >
+
+                Create Group
+
+            </a>
+
+
+            <a
+                href="{% url 'join_group' %}"
+                class="btn-outline"
+            >
+
+                Join Group
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PROFILE DROPDOWN
+    ====================================================== -->
+
+    <div class="dropdown-wrapper">
+
+
+        <button
+            type="button"
+            class="dropdown-toggle"
+            onclick="toggleProfileMenu()"
+        >
+
+
+            <span>
+
+                My Profile
+
+            </span>
+
+
+            <span
+                class="dropdown-arrow"
+                id="profileArrow"
+            >
+
+                ▼
+
+            </span>
+
+
+        </button>
+
+
+
+        <div
+            class="dropdown-content"
+            id="profileDropdownContent"
+        >
+
+
+            <div class="profile-card">
+
+
+                <div class="profile-grid">
+
+
+                    <div class="profile-item">
+
+
+                        <div class="profile-label">
+
+                            Name
+
+                        </div>
+
+
+                        <div class="profile-value">
+
+                            {{ profile.name }}
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="profile-item">
+
+
+                        <div class="profile-label">
+
+                            Email
+
+                        </div>
+
+
+                        <div class="profile-value">
+
+                            {{ profile.email }}
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="profile-item">
+
+
+                        <div class="profile-label">
+
+                            Nickname
+
+                        </div>
+
+
+                        <div class="profile-value">
+
+                            {{ profile.nickname }}
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="profile-item">
+
+
+                        <div class="profile-label">
+
+                            Phone
+
+                        </div>
+
+
+                        <div class="profile-value">
+
+                            {{ profile.phone }}
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="profile-item">
+
+
+                        <div class="profile-label">
+
+                            Gender
+
+                        </div>
+
+
+                        <div class="profile-value">
+
+                            {{ profile.gender }}
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="profile-item">
+
+
+                        <div class="profile-label">
+
+                            UPI ID
+
+                        </div>
+
+
+                        <div class="profile-value">
+
+                            {{ profile.upi_id }}
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="profile-item profile-bio">
+
+
+                        <div class="profile-label">
+
+                            Bio
+
+                        </div>
+
+
+                        <div class="profile-value">
+
+                            {{ profile.bio }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="profile-actions">
+
+
+                    <a href="{% url 'edit_profile' %}">
+
+                        Edit Profile
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         GROUPS DROPDOWN
+    ====================================================== -->
+
+    <div class="dropdown-wrapper">
+
+
+        <button
+            type="button"
+            class="dropdown-toggle"
+            onclick="toggleGroupsMenu()"
+        >
+
+
+            <span>
+
+                My Groups
+
+            </span>
+
+
+            <span
+                class="dropdown-arrow"
+                id="groupsArrow"
+            >
+
+                ▼
+
+            </span>
+
+
+        </button>
+
+
+
+        <div
+            class="dropdown-content"
+            id="groupsDropdownContent"
+        >
+
+
+            {% if groups %}
+
+
+                <div class="groups-list">
+
+
+                    {% for group in groups %}
+
+
+                        <div class="group-card">
+
+
+                            <div class="group-card-title">
+
+                                {{ group.group_name }}
+
+                            </div>
+
+
+                            <div class="group-info">
+
+                                Invite Code:
+
+                                <b>
+
+                                    {{ group.invite_code }}
+
+                                </b>
+
+                            </div>
+
+
+                            <form
+                                method="POST"
+                                action="{% url 'group_home' %}"
+                            >
+
+
+                                {% csrf_token %}
+
+
+                                <input
+                                    type="hidden"
+                                    name="group_id"
+                                    value="{{ group.group_id }}"
+                                >
+
+
+                                <button type="submit">
+
+                                    Open Group →
+
+                                </button>
+
+
+                            </form>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="empty-state">
+
+                    You're not in any group yet.
+
+                    Create a new group or join an existing one
+                    to start splitting expenses.
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+
+
+<!-- =========================================================
+     RIGHT SIDEBAR
+========================================================= -->
+
+<div class="right">
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="right-block">
+
+
+        <div class="right-head">
+
+
+            <h3>
+
+                Quick Actions
+
+            </h3>
+
+
+        </div>
+
+
+
+        <div class="quick-item">
+
+
+            <div class="quick-title">
+
+                Create a new group
+
+            </div>
+
+
+            <div class="quick-meta">
+
+                Start managing shared expenses
+                with your friends.
+
+            </div>
+
+
+            <a
+                href="{% url 'create_group' %}"
+                class="quick-button"
+            >
+
+                Create Group
+
+            </a>
+
+
+        </div>
+
+
+
+        <div class="quick-item">
+
+
+            <div class="quick-title">
+
+                Join an existing group
+
+            </div>
+
+
+            <div class="quick-meta">
+
+                Use an invite code to join
+                your friend's group.
+
+            </div>
+
+
+            <a
+                href="{% url 'join_group' %}"
+                class="quick-button"
+            >
+
+                Join Group
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ACCOUNT -->
+
+    <div class="right-block">
+
+
+        <div class="right-head">
+
+
+            <h3>
+
+                Account
+
+            </h3>
+
+
+        </div>
+
+
+
+        <div class="quick-item">
+
+
+            <div class="quick-title">
+
+                Your account
+
+            </div>
+
+
+            <div class="quick-meta">
+
+                Logged in as {{ profile.email }}
+
+            </div>
+
+
+        </div>
+
+
+        <div class="quick-item">
+
+
+            <div class="quick-title">
+
+                Profile Status
+
+            </div>
+
+
+            <div class="quick-meta">
+
+                Your Settlé profile is active.
+
+            </div>
+
+
+        </div>
+
+
+        <a
+            href="{% url 'logout_view' %}"
+            class="quick-button"
+        >
+
+            Logout
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT — DROPDOWNS
+     DJANGO LOGIC UNCHANGED
+========================================================= -->
+
+<script>
+
+
+function toggleProfileMenu() {
+
+
+    const content =
+        document.getElementById(
+            "profileDropdownContent"
+        );
+
+
+    const arrow =
+        document.getElementById(
+            "profileArrow"
+        );
+
+
+    content.classList.toggle("show");
+
+    arrow.classList.toggle("rotate");
+
+
+}
+
+
+
+function toggleGroupsMenu() {
+
+
+    const content =
+        document.getElementById(
+            "groupsDropdownContent"
+        );
+
+
+    const arrow =
+        document.getElementById(
+            "groupsArrow"
+        );
+
+
+    content.classList.toggle("show");
+
+    arrow.classList.toggle("rotate");
+
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

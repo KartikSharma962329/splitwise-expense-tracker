@@ -1,0 +1,5339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ group.group_name }} — Settlé</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<style>
+
+/* =========================================================
+   SETTLÉ — GROUP HOME
+   PREMIUM PLUM + MINT
+   DESKTOP + FULL MOBILE RESPONSIVE
+   DJANGO LOGIC UNCHANGED
+========================================================= */
+
+:root {
+
+    --mint: #5FE0A8;
+    --mint-dark: #3DC48C;
+    --mint-deep: #279A6C;
+
+    --mint-light: #E3FBF0;
+    --mint-soft: #F1FDF7;
+
+    --plum: #3B1F3A;
+    --plum-deep: #26132A;
+
+    --white: #FFFFFF;
+
+    --page-bg: #F7F5EE;
+    --sidebar-bg: #FBFAF4;
+    --main-bg: #FFFFFF;
+    --right-bg: #FBFAF4;
+
+    --text: #1B1D18;
+    --muted: #6E7268;
+    --faint: #A7ABA0;
+
+    --border: #E7E3D6;
+
+    --coral: #E07A4F;
+    --coral-soft: #FCEBE2;
+
+    --gold: #D29F2E;
+    --gold-soft: #FBF1DC;
+
+    --sun: #FFC857;
+
+    --shadow: 0 20px 55px rgba(38,19,42,0.10);
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 22px;
+
+    background:
+        radial-gradient(circle at 5% 5%, rgba(95,224,168,0.16), transparent 24%),
+        radial-gradient(circle at 95% 92%, rgba(95,224,168,0.12), transparent 26%),
+        linear-gradient(180deg, #FBFAF4, var(--page-bg) 45%, #F2EFE4);
+
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Poppins', sans-serif;
+}
+
+::selection {
+    background: var(--mint);
+    color: var(--plum-deep);
+}
+
+:focus-visible {
+    outline: 2px solid var(--mint-dark);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+.hero,
+.tile,
+.right-block,
+.chat-block,
+.list-row {
+
+    animation:
+        fadeUp
+        0.5s
+        ease
+        both;
+
+}
+
+.hero {
+    animation-delay: 0s;
+}
+
+.tile-row .tile:nth-child(1) {
+    animation-delay: 0.06s;
+}
+
+.tile-row .tile:nth-child(2) {
+    animation-delay: 0.11s;
+}
+
+.tile-row .tile:nth-child(3) {
+    animation-delay: 0.16s;
+}
+
+.tile-row .tile:nth-child(4) {
+    animation-delay: 0.21s;
+}
+
+.tile-row .tile:nth-child(5) {
+    animation-delay: 0.26s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+
+    }
+
+}
+
+
+/* =========================================================
+   MAIN SHELL
+========================================================= */
+
+.shell {
+
+    width: 100%;
+    max-width: 1540px;
+
+    height: calc(100vh - 44px);
+    max-height: calc(100vh - 44px);
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        205px
+        minmax(0,1fr)
+        260px;
+
+    background: var(--main-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: 26px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 30px 80px rgba(38,19,42,0.14);
+
+}
+
+
+/* =========================================================
+   LEFT SIDEBAR
+========================================================= */
+
+.side {
+
+    position: relative;
+
+    padding: 27px 17px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--plum),
+            var(--plum-deep)
+        );
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+}
+
+.side::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 230px;
+    height: 230px;
+
+    top: -120px;
+    left: -120px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(95,224,168,0.10);
+
+}
+
+.side::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    left: -130px;
+    bottom: -150px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(95,224,168,0.22),
+            transparent 68%
+        );
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.side-brand {
+
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 40px;
+
+    color: #FFFFFF;
+
+    font-family: 'Poppins', sans-serif;
+
+    font-size: 1.05rem;
+
+    font-weight: 700;
+
+}
+
+.side-brand-mark {
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color: var(--plum-deep);
+
+    font-size: 0.95rem;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.22);
+
+    transform: rotate(-4deg);
+
+    transition:
+        transform
+        0.3s
+        ease;
+
+}
+
+.side-brand:hover .side-brand-mark {
+
+    transform:
+        rotate(4deg)
+        scale(1.05);
+
+}
+
+
+/* =========================================================
+   SIDEBAR LABEL
+========================================================= */
+
+.side-label {
+
+    position: relative;
+    z-index: 2;
+
+    margin:
+        20px
+        11px
+        9px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        );
+
+    font-size:
+        0.70rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.09em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+/* =========================================================
+   SIDEBAR ITEMS
+========================================================= */
+
+.side-item {
+
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding:
+        10px
+        12px;
+
+    margin-bottom:
+        5px;
+
+    border-radius:
+        13px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.68
+        );
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        500;
+
+    transition:
+        all
+        0.22s
+        ease;
+
+}
+
+.side-item:hover {
+
+    color:
+        #FFFFFF;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    transform:
+        translateX(3px);
+
+}
+
+.side-item.active {
+
+    color:
+        var(--plum-deep);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    box-shadow:
+        0
+        8px
+        20px
+        rgba(
+            0,
+            0,
+            0,
+            0.20
+        );
+
+    font-weight:
+        700;
+
+}
+
+.side-dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        currentColor;
+
+}
+
+
+/* =========================================================
+   INVITE TAG
+========================================================= */
+
+.invite-tag {
+
+    position: relative;
+    z-index: 2;
+
+    margin:
+        14px
+        11px
+        4px;
+
+    padding:
+        10px
+        12px;
+
+    border-radius:
+        11px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    border:
+        1px dashed
+        rgba(
+            95,
+            224,
+            168,
+            0.45
+        );
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+}
+
+.invite-tag .plane {
+
+    flex-shrink:
+        0;
+
+    width:
+        24px;
+
+    height:
+        24px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--mint);
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.78rem;
+
+    transform:
+        rotate(45deg);
+
+}
+
+.invite-copy {
+
+    min-width:
+        0;
+
+}
+
+.invite-label {
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        );
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.06em;
+
+    text-transform:
+        uppercase;
+
+}
+
+.invite-code {
+
+    color:
+        #FFFFFF;
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main {
+
+    min-width:
+        0;
+
+    padding:
+        25px
+        27px
+        30px;
+
+    background:
+        var(--main-bg);
+
+    overflow-y:
+        auto;
+
+    overflow-x:
+        hidden;
+
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        15px;
+
+    margin-bottom:
+        20px;
+
+}
+
+.topbar-search {
+
+    flex:
+        1;
+
+    max-width:
+        430px;
+
+    height:
+        38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    padding:
+        0
+        15px;
+
+    background:
+        var(--mint-soft);
+
+    border:
+        1px solid
+        var(--mint-light);
+
+    border-radius:
+        20px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.84rem;
+
+    overflow:
+        hidden;
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+.topbar-search::before {
+
+    content:
+        "⌕";
+
+    margin-right:
+        8px;
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        1.05rem;
+
+}
+
+.topbar-user {
+
+    margin-left:
+        auto;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    max-width:
+        220px;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        600;
+
+}
+
+.avatar {
+
+    width:
+        36px;
+
+    height:
+        36px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        700;
+
+    box-shadow:
+        0
+        0
+        0
+        3px
+        var(--mint-light),
+
+        0
+        0
+        0
+        4px
+        var(--mint-dark);
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    align-items:
+        stretch;
+
+    margin-bottom:
+        23px;
+
+    border-radius:
+        20px;
+
+    overflow:
+        visible;
+
+    box-shadow:
+        0
+        18px
+        40px
+        rgba(
+            38,
+            19,
+            42,
+            0.20
+        );
+
+}
+
+.hero-left {
+
+    position:
+        relative;
+
+    flex:
+        1.6;
+
+    min-width:
+        0;
+
+    padding:
+        26px
+        30px;
+
+    border-radius:
+        20px
+        0
+        0
+        20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--plum),
+            var(--plum-deep)
+        );
+
+    overflow:
+        hidden;
+
+}
+
+.hero-left::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        260px;
+
+    height:
+        260px;
+
+    right:
+        -140px;
+
+    top:
+        -150px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(
+            255,
+            200,
+            87,
+            0.14
+        );
+
+}
+
+.hero-left::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        200px;
+
+    height:
+        200px;
+
+    left:
+        -110px;
+
+    bottom:
+        -120px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(
+                95,
+                224,
+                168,
+                0.20
+            ),
+            transparent
+            70%
+        );
+
+}
+
+.hero-route {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        16px;
+
+}
+
+.hero-route .city {
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        1.15rem;
+
+    font-weight:
+        800;
+
+    color:
+        #FFFFFF;
+
+    letter-spacing:
+        0.02em;
+
+}
+
+.hero-route .path {
+
+    flex:
+        1;
+
+    position:
+        relative;
+
+    height:
+        1px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgba(
+                255,
+                255,
+                255,
+                0.35
+            )
+            0
+            6px,
+
+            transparent
+            6px
+            12px
+        );
+
+    min-width:
+        30px;
+
+    max-width:
+        90px;
+
+}
+
+.hero-route .path::after {
+
+    content:
+        "✈";
+
+    position:
+        absolute;
+
+    top:
+        50%;
+
+    left:
+        50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        rotate(90deg);
+
+    color:
+        var(--mint);
+
+    font-size:
+        0.75rem;
+
+    background:
+        var(--plum);
+
+    padding:
+        0
+        3px;
+
+}
+
+.hero-route .code {
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        );
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        600;
+
+}
+
+.hero-left .eyebrow {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        5px
+        12px;
+
+    margin-bottom:
+        10px;
+
+    border-radius:
+        20px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.16
+        );
+
+    color:
+        var(--mint);
+
+    font-size:
+        0.74rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.04em;
+
+    text-transform:
+        uppercase;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+}
+
+.hero-left .eyebrow .dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--sun);
+
+    box-shadow:
+        0
+        0
+        0
+        4px
+        rgba(
+            255,
+            200,
+            87,
+            0.22
+        );
+
+}
+
+.hero-left h2 {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    font-size:
+        1.5rem;
+
+    line-height:
+        1.25;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.03em;
+
+    color:
+        #FFFFFF;
+
+    margin-bottom:
+        7px;
+
+}
+
+.hero-left p {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    max-width:
+        420px;
+
+    margin-bottom:
+        18px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.62
+        );
+
+    font-size:
+        0.86rem;
+
+    line-height:
+        1.55;
+
+}
+
+
+/* =========================================================
+   HERO BUTTONS
+========================================================= */
+
+.hero-btns {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        flex;
+
+    gap:
+        8px;
+
+}
+
+.hero-btns a {
+
+    padding:
+        8px
+        17px;
+
+    border-radius:
+        20px;
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        700;
+
+    transition:
+        all
+        0.22s
+        ease;
+
+}
+
+.hero-btns a:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+.btn-white {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    box-shadow:
+        0
+        7px
+        17px
+        rgba(
+            0,
+            0,
+            0,
+            0.22
+        );
+
+}
+
+.btn-outline {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.30
+        );
+
+    color:
+        #FFFFFF;
+
+}
+
+
+/* =========================================================
+   HERO TEAR
+========================================================= */
+
+.hero-tear {
+
+    position:
+        relative;
+
+    flex:
+        0 0 0;
+
+    width:
+        0;
+
+    background:
+        repeating-linear-gradient(
+            180deg,
+            var(--border)
+            0
+            8px,
+
+            transparent
+            8px
+            16px
+        );
+
+    z-index:
+        3;
+
+}
+
+.hero-tear::before,
+.hero-tear::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    width:
+        26px;
+
+    height:
+        26px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--page-bg);
+
+    transform:
+        translateX(-50%);
+
+    box-shadow:
+        inset
+        0
+        0
+        0
+        1px
+        var(--border);
+
+}
+
+.hero-tear::before {
+
+    top:
+        -13px;
+
+}
+
+.hero-tear::after {
+
+    bottom:
+        -13px;
+
+}
+
+
+/* =========================================================
+   HERO STATS
+========================================================= */
+
+.hero-stats {
+
+    position:
+        relative;
+
+    flex:
+        1;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
+
+    gap:
+        4px;
+
+    min-width:
+        190px;
+
+    padding:
+        22px
+        26px;
+
+    border-radius:
+        0
+        20px
+        20px
+        0;
+
+    background:
+        var(--mint-soft);
+
+    border:
+        1px solid
+        var(--mint-light);
+
+    border-left:
+        none;
+
+}
+
+.hero-stat {
+
+    display:
+        flex;
+
+    align-items:
+        baseline;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    padding:
+        11px
+        0;
+
+}
+
+.hero-stat + .hero-stat {
+
+    border-top:
+        1px dashed
+        #D7EEDF;
+
+}
+
+.hero-stat .label {
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        600;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.04em;
+
+}
+
+.hero-stat .val {
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-size:
+        1.3rem;
+
+    font-weight:
+        700;
+
+    font-variant-numeric:
+        tabular-nums;
+
+}
+
+.hero-stat.owe .val {
+
+    color:
+        var(--coral);
+
+}
+
+.hero-stat.owed .val {
+
+    color:
+        var(--mint-deep);
+
+}
+
+.hero-stats .stub-foot {
+
+    margin-top:
+        10px;
+
+    padding-top:
+        10px;
+
+    border-top:
+        1px solid
+        var(--mint-light);
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    color:
+        var(--faint);
+
+    font-size:
+        0.72rem;
+
+    letter-spacing:
+        0.03em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.row-head {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        10px;
+
+}
+
+.row-head h3 {
+
+    font-size:
+        1rem;
+
+    font-weight:
+        600;
+
+}
+
+.tag-count {
+
+    padding:
+        5px
+        9px;
+
+    border-radius:
+        15px;
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.74rem;
+
+    font-weight:
+        700;
+
+}
+
+
+/* =========================================================
+   PENDING EXPENSES
+========================================================= */
+
+.tile-row {
+
+    display:
+        flex;
+
+    gap:
+        14px;
+
+    overflow-x:
+        auto;
+
+    padding:
+        2px
+        2px
+        16px;
+
+    margin-bottom:
+        21px;
+
+    scrollbar-width:
+        thin;
+
+}
+
+.tile {
+
+    position:
+        relative;
+
+    min-width:
+        150px;
+
+    padding:
+        13px
+        14px
+        16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #FFFFFF,
+            var(--mint-soft)
+        );
+
+    border:
+        1px solid
+        var(--mint-light);
+
+    border-radius:
+        14px
+        14px
+        0
+        0;
+
+    transition:
+        all
+        0.22s
+        ease;
+
+    overflow:
+        visible;
+
+}
+
+.tile:hover {
+
+    transform:
+        translateY(-3px)
+        rotate(-0.6deg);
+
+    box-shadow:
+        0
+        10px
+        22px
+        rgba(
+            38,
+            19,
+            42,
+            0.10
+        );
+
+    border-color:
+        var(--mint-dark);
+
+}
+
+.tile::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        0;
+
+    width:
+        100%;
+
+    height:
+        3px;
+
+    border-radius:
+        14px
+        14px
+        0
+        0;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+}
+
+.tile::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    bottom:
+        -7px;
+
+    height:
+        8px;
+
+    background:
+        radial-gradient(
+            circle at 8px 0,
+            transparent 6.5px,
+            var(--mint-soft) 7px
+        )
+        repeat-x;
+
+    background-size:
+        16px
+        16px;
+
+}
+
+.tile .stub-num {
+
+    position:
+        absolute;
+
+    top:
+        10px;
+
+    right:
+        12px;
+
+    color:
+        var(--faint);
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-size:
+        0.68rem;
+
+}
+
+.tile .amt {
+
+    margin-bottom:
+        5px;
+
+    color:
+        var(--mint-deep);
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-size:
+        1.05rem;
+
+    font-weight:
+        700;
+
+}
+
+.tile .desc {
+
+    margin-bottom:
+        3px;
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        600;
+
+}
+
+.tile .meta {
+
+    margin-bottom:
+        8px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.74rem;
+
+}
+
+.tile a {
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.76rem;
+
+    font-weight:
+        700;
+
+}
+
+.empty-mini {
+
+    padding:
+        16px
+        12px;
+
+    color:
+        var(--faint);
+
+    font-size:
+        0.84rem;
+
+    text-align:
+        center;
+
+    border:
+        1px dashed
+        var(--border);
+
+    border-radius:
+        12px;
+
+    background:
+        var(--mint-soft);
+
+}
+
+.empty-mini::before {
+
+    content:
+        "🧭";
+
+    display:
+        block;
+
+    margin-bottom:
+        5px;
+
+    font-size:
+        1.1rem;
+
+    opacity:
+        0.7;
+
+}
+
+.tile-row .empty-mini {
+
+    min-width:
+        100%;
+
+}
+
+
+/* =========================================================
+   DROPDOWN
+========================================================= */
+
+.dropdown-wrapper {
+
+    margin-top:
+        5px;
+
+}
+
+.dropdown-toggle {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    padding:
+        13px
+        17px;
+
+    border:
+        1px solid
+        var(--mint-light);
+
+    border-radius:
+        15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint-soft),
+            var(--mint-light)
+        );
+
+    color:
+        var(--mint-deep);
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        0.90rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+.dropdown-arrow {
+
+    width:
+        25px;
+
+    height:
+        25px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        #FFFFFF;
+
+    font-size:
+        0.62rem;
+
+    transition:
+        transform
+        0.3s
+        ease;
+
+}
+
+.dropdown-arrow.rotate {
+
+    transform:
+        rotate(180deg);
+
+}
+
+.dropdown-content {
+
+    display:
+        none;
+
+    margin-top:
+        13px;
+
+}
+
+.dropdown-content.show {
+
+    display:
+        block;
+
+    animation:
+        dropdownOpen
+        0.25s
+        ease;
+
+}
+
+@keyframes dropdownOpen {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(-8px);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+.section {
+
+    margin-bottom:
+        23px;
+
+}
+
+.list-panel {
+
+    overflow:
+        hidden;
+
+    background:
+        var(--sidebar-bg);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        16px;
+
+}
+
+.list-row {
+
+    padding:
+        14px
+        16px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+.list-row:last-child {
+
+    border-bottom:
+        none;
+
+}
+
+.list-row:hover {
+
+    background:
+        var(--mint-soft);
+
+}
+
+.row-flex {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+}
+
+.row-title {
+
+    font-size:
+        0.88rem;
+
+    font-weight:
+        600;
+
+}
+
+.row-meta {
+
+    margin-top:
+        3px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.75rem;
+
+}
+
+.split-list {
+
+    list-style:
+        none;
+
+    margin-top:
+        8px;
+
+    padding-top:
+        7px;
+
+    border-top:
+        1px dashed
+        #DCD7C6;
+
+}
+
+.split-list li {
+
+    padding:
+        2px
+        0;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.78rem;
+
+}
+
+.split-list li b {
+
+    color:
+        var(--text);
+
+}
+
+
+/* =========================================================
+   RIGHT SIDEBAR
+========================================================= */
+
+.right {
+
+    padding:
+        25px
+        17px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--right-bg),
+            #F5F2E7
+        );
+
+    border-left:
+        1px solid
+        var(--border);
+
+    overflow-y:
+        auto;
+
+    overflow-x:
+        hidden;
+
+}
+
+.right-block {
+
+    margin-bottom:
+        20px;
+
+    padding:
+        14px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.75
+        );
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        16px;
+
+}
+
+.right-head {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        8px;
+
+    margin-bottom:
+        9px;
+
+}
+
+.right-head h3 {
+
+    font-size:
+        0.90rem;
+
+    font-weight:
+        700;
+
+}
+
+
+/* =========================================================
+   MEMBERS
+========================================================= */
+
+.members-toggle {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    padding:
+        4px
+        6px;
+
+    border:
+        none;
+
+    background:
+        transparent;
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.74rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+.members-toggle .arrow {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        16px;
+
+    height:
+        16px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--mint-light);
+
+    font-size:
+        0.60rem;
+
+    transition:
+        transform
+        0.3s
+        ease;
+
+}
+
+.members-toggle .arrow.rotate {
+
+    transform:
+        rotate(180deg);
+
+}
+
+.members-body {
+
+    display:
+        none;
+
+}
+
+.members-body.show {
+
+    display:
+        block;
+
+    animation:
+        dropdownOpen
+        0.25s
+        ease;
+
+}
+
+.right-item {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        9px
+        0;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+.right-item:last-child {
+
+    border-bottom:
+        none;
+
+}
+
+.right-avatar {
+
+    width:
+        31px;
+
+    height:
+        31px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        700;
+
+}
+
+.right-item-title {
+
+    font-size:
+        0.80rem;
+
+    font-weight:
+        600;
+
+}
+
+.right-item-meta {
+
+    margin-top:
+        2px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.72rem;
+
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+.chat-block {
+
+    padding:
+        0;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.75
+        );
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        16px;
+
+    overflow:
+        hidden;
+
+}
+
+.chat-head {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    padding:
+        12px
+        14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--plum),
+            var(--plum-deep)
+        );
+
+}
+
+.chat-head h3 {
+
+    color:
+        #FFFFFF;
+
+    font-size:
+        0.88rem;
+
+    font-weight:
+        700;
+
+}
+
+.chat-head .pulse {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--mint);
+
+    box-shadow:
+        0
+        0
+        0
+        4px
+        rgba(
+            95,
+            224,
+            168,
+            0.25
+        );
+
+}
+
+.chat-panel {
+
+    max-height:
+        300px;
+
+    min-height:
+        140px;
+
+    overflow-y:
+        auto;
+
+    padding:
+        10px;
+
+    background:
+        var(--sidebar-bg);
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        6px;
+
+}
+
+.chat-line {
+
+    padding:
+        9px
+        11px;
+
+    background:
+        #FFFFFF;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        12px;
+
+    font-size:
+        0.85rem;
+
+    line-height:
+        1.5;
+
+}
+
+.chat-name {
+
+    color:
+        var(--mint-deep);
+
+    font-weight:
+        700;
+
+}
+
+.chat-time {
+
+    display:
+        block;
+
+    margin-top:
+        2px;
+
+    color:
+        var(--faint);
+
+    font-size:
+        0.70rem;
+
+}
+
+.chat-form {
+
+    display:
+        flex;
+
+    gap:
+        7px;
+
+    padding:
+        10px;
+
+    background:
+        #FFFFFF;
+
+    border-top:
+        1px solid
+        var(--border);
+
+}
+
+.chat-form input {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+    padding:
+        10px
+        12px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        11px;
+
+    background:
+        var(--sidebar-bg);
+
+    font-size:
+        0.85rem;
+
+}
+
+.chat-form button {
+
+    padding:
+        10px
+        17px;
+
+    border:
+        none;
+
+    border-radius:
+        11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+button.mini {
+
+    padding:
+        5px
+        9px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        7px;
+
+    background:
+        #FFFFFF;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.74rem;
+
+    font-weight:
+        600;
+
+    cursor:
+        pointer;
+
+}
+
+.btn-approve {
+
+    background:
+        var(--mint) !important;
+
+    color:
+        var(--plum-deep) !important;
+
+    border:
+        none !important;
+
+}
+
+.btn-reject {
+
+    background:
+        var(--coral-soft) !important;
+
+    color:
+        var(--coral) !important;
+
+    border:
+        none !important;
+
+}
+
+.form-actions {
+
+    display:
+        flex;
+
+    gap:
+        5px;
+
+    margin-top:
+        7px;
+
+}
+
+
+/* =========================================================
+   TAGS
+========================================================= */
+
+.tag {
+
+    display:
+        inline-block;
+
+    padding:
+        4px
+        8px;
+
+    border-radius:
+        13px;
+
+    font-size:
+        0.70rem;
+
+    font-weight:
+        700;
+
+}
+
+.tag.green {
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+}
+
+.tag.gold {
+
+    background:
+        var(--gold-soft);
+
+    color:
+        var(--gold);
+
+}
+
+.tag.red {
+
+    background:
+        var(--coral-soft);
+
+    color:
+        var(--coral);
+
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+}
+
+::-webkit-scrollbar-track {
+
+    background:
+        transparent;
+
+}
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        #C9EBDA;
+
+    border-radius:
+        10px;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width: 1200px) {
+
+    .shell {
+
+        grid-template-columns:
+            190px
+            minmax(0,1fr)
+            235px;
+
+    }
+
+    .main {
+
+        padding:
+            23px;
+
+    }
+
+}
+
+
+/* =========================================================
+   TABLET / SMALL LAPTOP
+========================================================= */
+
+@media(max-width: 1050px) {
+
+    body {
+
+        padding:
+            10px;
+
+    }
+
+    .shell {
+
+        display:
+            block;
+
+        height:
+            auto;
+
+        max-height:
+            none;
+
+        min-height:
+            auto;
+
+        border-radius:
+            18px;
+
+        overflow:
+            visible;
+
+    }
+
+    .side {
+
+        overflow:
+            hidden;
+
+        height:
+            auto;
+
+        border-radius:
+            18px
+            18px
+            0
+            0;
+
+    }
+
+    .main,
+    .right {
+
+        overflow:
+            visible;
+
+        height:
+            auto;
+
+    }
+
+    .side {
+
+        padding:
+            14px;
+
+    }
+
+    .side-brand {
+
+        margin-bottom:
+            15px;
+
+    }
+
+    .side-label {
+
+        display:
+            none;
+
+    }
+
+    .side-item {
+
+        display:
+            inline-flex;
+
+        width:
+            auto;
+
+        margin-right:
+            4px;
+
+    }
+
+    .main {
+
+        padding:
+            18px;
+
+    }
+
+    .hero {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        padding:
+            0;
+
+    }
+
+    .hero-left {
+
+        width:
+            100%;
+
+        border-radius:
+            20px
+            20px
+            0
+            0;
+
+    }
+
+    .hero-tear {
+
+        width:
+            100%;
+
+        height:
+            0;
+
+        background:
+            repeating-linear-gradient(
+                90deg,
+                var(--border)
+                0
+                8px,
+
+                transparent
+                8px
+                16px
+            );
+
+    }
+
+    .hero-tear::before,
+    .hero-tear::after {
+
+        top:
+            50%;
+
+        left:
+            auto;
+
+        transform:
+            translateY(-50%);
+
+    }
+
+    .hero-tear::before {
+
+        left:
+            -13px;
+
+    }
+
+    .hero-tear::after {
+
+        right:
+            -13px;
+
+        left:
+            auto;
+
+    }
+
+    .hero-stats {
+
+        width:
+            100%;
+
+        border-radius:
+            0
+            0
+            20px
+            20px;
+
+        border-left:
+            1px solid
+            var(--mint-light);
+
+        border-top:
+            none;
+
+    }
+
+    .hero-stat {
+
+        flex:
+            1;
+
+    }
+
+    .right {
+
+        border-left:
+            none;
+
+        border-top:
+            1px solid
+            var(--border);
+
+        margin-top:
+            4px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE — 768px
+========================================================= */
+
+@media(max-width: 768px) {
+
+    body {
+
+        padding:
+            0;
+
+        background:
+            var(--page-bg);
+
+    }
+
+    .shell {
+
+        width:
+            100%;
+
+        margin:
+            0;
+
+        border:
+            none;
+
+        border-radius:
+            0;
+
+        box-shadow:
+            none;
+
+        background:
+            var(--main-bg);
+
+    }
+
+
+    /* Hide desktop sidebar */
+
+    .side {
+
+        display:
+            none;
+
+    }
+
+
+    /* Main content */
+
+    .main {
+
+        width:
+            100%;
+
+        padding:
+            14px;
+
+        background:
+            var(--main-bg);
+
+    }
+
+
+    /* Top mobile header */
+
+    .topbar {
+
+        position:
+            sticky;
+
+        top:
+            0;
+
+        z-index:
+            20;
+
+        display:
+            flex;
+
+        flex-wrap:
+            nowrap;
+
+        gap:
+            10px;
+
+        margin:
+            -14px
+            -14px
+            18px;
+
+        padding:
+            12px
+            14px;
+
+        background:
+            rgba(
+                255,
+                255,
+                255,
+                0.96
+            );
+
+        border-bottom:
+            1px solid
+            var(--border);
+
+        backdrop-filter:
+            blur(12px);
+
+    }
+
+    .topbar-search {
+
+        order:
+            0;
+
+        flex:
+            1;
+
+        width:
+            auto;
+
+        max-width:
+            none;
+
+        height:
+            40px;
+
+        min-width:
+            0;
+
+        padding:
+            0
+            13px;
+
+        border-radius:
+            14px;
+
+        font-size:
+            0.76rem;
+
+    }
+
+    .topbar-user {
+
+        margin-left:
+            0;
+
+        max-width:
+            42px;
+
+        overflow:
+            visible;
+
+    }
+
+    .topbar-user {
+
+        font-size:
+            0;
+
+    }
+
+    .avatar {
+
+        width:
+            38px;
+
+        height:
+            38px;
+
+    }
+
+
+    /* Hero */
+
+    .hero {
+
+        margin-bottom:
+            22px;
+
+        border-radius:
+            18px;
+
+        box-shadow:
+            0
+            12px
+            30px
+            rgba(
+                38,
+                19,
+                42,
+                0.16
+            );
+
+    }
+
+    .hero-left {
+
+        padding:
+            22px
+            20px;
+
+        border-radius:
+            18px
+            18px
+            0
+            0;
+
+    }
+
+    .hero-route {
+
+        margin-bottom:
+            13px;
+
+    }
+
+    .hero-route .city {
+
+        max-width:
+            180px;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+        white-space:
+            nowrap;
+
+        font-size:
+            1rem;
+
+    }
+
+    .hero-route .path {
+
+        min-width:
+            20px;
+
+    }
+
+    .hero-left h2 {
+
+        font-size:
+            1.35rem;
+
+        line-height:
+            1.3;
+
+    }
+
+    .hero-left p {
+
+        font-size:
+            0.82rem;
+
+        line-height:
+            1.55;
+
+    }
+
+    .hero-btns {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr
+            1fr;
+
+        width:
+            100%;
+
+        gap:
+            8px;
+
+    }
+
+    .hero-btns a {
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        min-height:
+            42px;
+
+        padding:
+            9px
+            10px;
+
+        text-align:
+            center;
+
+    }
+
+    .hero-tear {
+
+        height:
+            1px;
+
+    }
+
+    .hero-stats {
+
+        padding:
+            10px
+            18px
+            15px;
+
+        border-radius:
+            0
+            0
+            18px
+            18px;
+
+    }
+
+    .hero-stat {
+
+        padding:
+            10px
+            0;
+
+    }
+
+    .hero-stat .label {
+
+        font-size:
+            0.70rem;
+
+    }
+
+    .hero-stat .val {
+
+        font-size:
+            1.15rem;
+
+    }
+
+    .hero-stats .stub-foot {
+
+        font-size:
+            0.64rem;
+
+    }
+
+
+    /* Pending expenses */
+
+    .row-head {
+
+        margin-bottom:
+            9px;
+
+    }
+
+    .row-head h3 {
+
+        font-size:
+            0.94rem;
+
+    }
+
+    .tag-count {
+
+        font-size:
+            0.68rem;
+
+    }
+
+    .tile-row {
+
+        gap:
+            10px;
+
+        margin-right:
+            -14px;
+
+        padding-right:
+            14px;
+
+        margin-bottom:
+            20px;
+
+    }
+
+    .tile {
+
+        min-width:
+            155px;
+
+    }
+
+
+    /* Dropdown */
+
+    .dropdown-toggle {
+
+        min-height:
+            50px;
+
+        padding:
+            12px
+            14px;
+
+        border-radius:
+            14px;
+
+        font-size:
+            0.84rem;
+
+    }
+
+    .dropdown-content {
+
+        margin-top:
+            10px;
+
+    }
+
+
+    /* Activity panels */
+
+    .list-panel {
+
+        border-radius:
+            14px;
+
+    }
+
+    .list-row {
+
+        padding:
+            13px;
+
+    }
+
+    .row-flex {
+
+        align-items:
+            flex-start;
+
+    }
+
+    .row-title {
+
+        font-size:
+            0.82rem;
+
+    }
+
+    .row-meta {
+
+        font-size:
+            0.70rem;
+
+    }
+
+    .split-list li {
+
+        font-size:
+            0.74rem;
+
+        line-height:
+            1.45;
+
+    }
+
+
+    /* Right sidebar becomes mobile sections */
+
+    .right {
+
+        width:
+            100%;
+
+        padding:
+            18px
+            14px
+            30px;
+
+        background:
+            var(--main-bg);
+
+        border-top:
+            1px solid
+            var(--border);
+
+    }
+
+    .right-block {
+
+        margin-bottom:
+            14px;
+
+        padding:
+            14px;
+
+        border-radius:
+            15px;
+
+    }
+
+    .right-head h3 {
+
+        font-size:
+            0.88rem;
+
+    }
+
+
+    /* Approval section */
+
+    .right-block > div[style] {
+
+        padding:
+            11px
+            0 !important;
+
+    }
+
+    .form-actions {
+
+        gap:
+            7px;
+
+    }
+
+    button.mini {
+
+        flex:
+            1;
+
+        min-height:
+            36px;
+
+    }
+
+
+    /* Members */
+
+    .right-item {
+
+        padding:
+            10px
+            0;
+
+    }
+
+    .right-item-title {
+
+        font-size:
+            0.78rem;
+
+        word-break:
+            break-word;
+
+    }
+
+    .right-item-meta {
+
+        font-size:
+            0.68rem;
+
+        word-break:
+            break-all;
+
+    }
+
+
+    /* Chat */
+
+    .chat-block {
+
+        border-radius:
+            15px;
+
+    }
+
+    .chat-panel {
+
+        max-height:
+            360px;
+
+        min-height:
+            160px;
+
+        padding:
+            9px;
+
+    }
+
+    .chat-line {
+
+        padding:
+            9px
+            10px;
+
+        font-size:
+            0.80rem;
+
+    }
+
+    .chat-form {
+
+        padding:
+            10px;
+
+    }
+
+    .chat-form input {
+
+        min-height:
+            42px;
+
+        font-size:
+            0.82rem;
+
+    }
+
+    .chat-form button {
+
+        min-height:
+            42px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE — 550px
+========================================================= */
+
+@media(max-width: 550px) {
+
+    .main {
+
+        padding:
+            12px;
+
+    }
+
+    .topbar {
+
+        margin:
+            -12px
+            -12px
+            16px;
+
+        padding:
+            11px
+            12px;
+
+    }
+
+    .topbar-search {
+
+        height:
+            38px;
+
+        font-size:
+            0.72rem;
+
+    }
+
+    .avatar {
+
+        width:
+            36px;
+
+        height:
+            36px;
+
+    }
+
+
+    .hero-left {
+
+        padding:
+            20px
+            17px;
+
+    }
+
+    .hero-left .eyebrow {
+
+        font-size:
+            0.66rem;
+
+    }
+
+    .hero-left h2 {
+
+        font-size:
+            1.22rem;
+
+    }
+
+    .hero-left p {
+
+        font-size:
+            0.78rem;
+
+    }
+
+    .hero-btns {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .hero-btns a {
+
+        width:
+            100%;
+
+    }
+
+    .hero-stats {
+
+        padding:
+            9px
+            16px
+            13px;
+
+    }
+
+    .hero-stat .label {
+
+        font-size:
+            0.65rem;
+
+    }
+
+    .hero-stat .val {
+
+        font-size:
+            1.05rem;
+
+    }
+
+
+    .tile {
+
+        min-width:
+            145px;
+
+        padding:
+            12px
+            12px
+            15px;
+
+    }
+
+    .tile .amt {
+
+        font-size:
+            0.98rem;
+
+    }
+
+    .tile .desc {
+
+        font-size:
+            0.80rem;
+
+    }
+
+
+    .dropdown-toggle {
+
+        min-height:
+            48px;
+
+    }
+
+
+    .right {
+
+        padding:
+            16px
+            12px
+            25px;
+
+    }
+
+    .right-block {
+
+        padding:
+            12px;
+
+    }
+
+
+    .row-flex {
+
+        gap:
+            8px;
+
+    }
+
+    .row-title {
+
+        font-size:
+            0.78rem;
+
+    }
+
+
+    .chat-form {
+
+        flex-direction:
+            row;
+
+    }
+
+    .chat-form button {
+
+        width:
+            auto;
+
+        padding:
+            10px
+            14px;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES — 380px
+========================================================= */
+
+@media(max-width: 380px) {
+
+    .main {
+
+        padding:
+            10px;
+
+    }
+
+    .topbar {
+
+        margin:
+            -10px
+            -10px
+            14px;
+
+        padding:
+            10px;
+
+    }
+
+    .hero-left {
+
+        padding:
+            18px
+            15px;
+
+    }
+
+    .hero-left h2 {
+
+        font-size:
+            1.12rem;
+
+    }
+
+    .hero-route .city {
+
+        max-width:
+            135px;
+
+    }
+
+    .hero-stats {
+
+        padding-left:
+            13px;
+
+        padding-right:
+            13px;
+
+    }
+
+    .hero-stat .label {
+
+        font-size:
+            0.60rem;
+
+    }
+
+    .hero-stat .val {
+
+        font-size:
+            0.95rem;
+
+    }
+
+    .tile {
+
+        min-width:
+            140px;
+
+    }
+
+    .right {
+
+        padding-left:
+            10px;
+
+        padding-right:
+            10px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="shell">
+
+
+<!-- =========================================================
+     LEFT SIDEBAR
+     DESKTOP ONLY
+========================================================= -->
+
+<div class="side">
+
+
+    <div class="side-brand">
+
+        <div class="side-brand-mark">
+            S
+        </div>
+
+        Settlé
+
+    </div>
+
+
+    <div class="side-label">
+        Group
+    </div>
+
+
+    <div class="side-item active">
+
+        <span class="side-dot"></span>
+
+        Dashboard
+
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        Expenses
+
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        Payments
+
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        Chat
+
+    </div>
+
+
+    <div class="side-label">
+        Info
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        {{ group.group_name }}
+
+    </div>
+
+
+    <div class="invite-tag">
+
+        <span class="plane">
+            ✈
+        </span>
+
+        <div class="invite-copy">
+
+            <div class="invite-label">
+                Invite code
+            </div>
+
+            <div class="invite-code">
+
+                {{ group.invite_code }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<div class="main">
+
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+
+        <div class="topbar-search">
+
+            {{ group.description }}
+
+        </div>
+
+
+        <div class="topbar-user">
+
+
+            <div class="avatar">
+
+                {{ my_email|slice:":2"|upper }}
+
+            </div>
+
+
+            {{ my_email }}
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+
+        <div class="hero-left">
+
+
+            <div class="eyebrow">
+
+                <span class="dot"></span>
+
+                Trip fund
+
+            </div>
+
+
+            <div class="hero-route">
+
+                <span class="city">
+
+                    {{ group.group_name }}
+
+                </span>
+
+                <span class="path"></span>
+
+                <span class="code">
+
+                    SETL
+
+                </span>
+
+            </div>
+
+
+            <h2>
+
+                Your balance in this group
+
+            </h2>
+
+
+            <p>
+
+                Keep track of what you owe and what's coming
+                back to you, all settled fairly and transparently.
+
+            </p>
+
+
+            <div class="hero-btns">
+
+
+                <a
+                    href="{% url 'record_payment' %}"
+                    class="btn-white"
+                >
+
+                    Pay someone
+
+                </a>
+
+
+                <a
+                    href="{% url 'add_expense' %}"
+                    class="btn-outline"
+                >
+
+                    Add expense
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="hero-tear"></div>
+
+
+        <div class="hero-stats">
+
+
+            <div class="hero-stat owe">
+
+
+                <div class="label">
+
+                    You owe
+
+                </div>
+
+
+                <div class="val">
+
+                    ₹{% widthratio fee_summary.remaining_i_owe 100 1 %}
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="hero-stat owed">
+
+
+                <div class="label">
+
+                    Owed to you
+
+                </div>
+
+
+                <div class="val">
+
+                    ₹{% widthratio fee_summary.remaining_others_owe 100 1 %}
+
+                </div>
+
+
+            </div>
+
+
+            <div class="stub-foot">
+
+                <span>
+
+                    Boarding: any time
+
+                </span>
+
+                <span>
+
+                    ✈ SETTLÉ
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PENDING EXPENSES
+    ====================================================== -->
+
+    <div class="row-head">
+
+
+        <h3>
+
+            Pending Expenses
+
+        </h3>
+
+
+        <span class="tag-count">
+
+            {{ pending_expenses|length }} waiting
+
+        </span>
+
+
+    </div>
+
+
+    <div class="tile-row">
+
+
+        {% for expense in pending_expenses %}
+
+
+            <div class="tile">
+
+
+                <span class="stub-num">
+
+                    #{{ expense.expense_id }}
+
+                </span>
+
+
+                <div class="amt">
+
+                    ₹{% widthratio expense.amount 100 1 %}
+
+                </div>
+
+
+                <div class="desc">
+
+                    {{ expense.description }}
+
+                </div>
+
+
+                <div class="meta">
+
+                    {{ expense.paid_by }}
+
+                    ·
+
+                    {{ expense.expense_date }}
+
+                </div>
+
+
+                <a
+                    href="{% url 'expense_detail' expense.expense_id %}"
+                >
+
+                    Review →
+
+                </a>
+
+
+            </div>
+
+
+        {% empty %}
+
+
+            <div class="empty-mini">
+
+                No pending expenses
+
+            </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         GROUP ACTIVITY DROPDOWN
+    ====================================================== -->
+
+    <div class="dropdown-wrapper">
+
+
+        <button
+            type="button"
+            class="dropdown-toggle"
+            onclick="toggleGroupMenu()"
+            id="groupDropdownButton"
+        >
+
+            <span>
+
+                Group Activity
+
+            </span>
+
+
+            <span
+                class="dropdown-arrow"
+                id="dropdownArrow"
+            >
+
+                ▼
+
+            </span>
+
+
+        </button>
+
+
+
+        <div
+            class="dropdown-content"
+            id="groupDropdownContent"
+        >
+
+
+            <!-- EXPENSE HISTORY -->
+
+            <div class="section">
+
+
+                <div class="row-head">
+
+
+                    <h3>
+
+                        Expense History
+
+                    </h3>
+
+
+                </div>
+
+
+                <div class="list-panel">
+
+
+                    {% for item in approved_expenses %}
+
+
+                        <div class="list-row">
+
+
+                            <div class="row-flex">
+
+
+                                <div>
+
+
+                                    <div class="row-title">
+
+                                        {{ item.expense.description }}
+
+                                    </div>
+
+
+                                    <div class="row-meta">
+
+                                        {{ item.expense.paid_by }}
+
+                                        ·
+
+                                        {{ item.expense.expense_date }}
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="row-title">
+
+                                    ₹{% widthratio item.expense.amount 100 1 %}
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <ul class="split-list">
+
+
+                                {% for split in item.split_list %}
+
+
+                                    <li>
+
+
+                                        {% if split.email == item.expense.paid_by %}
+
+
+                                            {{ split.email }} covered
+
+                                            <b>
+
+                                                ₹{% widthratio split.share_paise 100 1 %}
+
+                                            </b>
+
+                                            of their own share
+
+
+                                        {% else %}
+
+
+                                            {{ split.email }} owes
+
+                                            {{ item.expense.paid_by }}
+
+                                            <b>
+
+                                                ₹{% widthratio split.share_paise 100 1 %}
+
+                                            </b>
+
+
+                                        {% endif %}
+
+
+                                    </li>
+
+
+                                {% endfor %}
+
+
+                            </ul>
+
+
+                        </div>
+
+
+                    {% empty %}
+
+
+                        <div class="empty-mini">
+
+                            No approved transactions yet
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- PAYMENT HISTORY -->
+
+            <div class="section">
+
+
+                <div class="row-head">
+
+
+                    <h3>
+
+                        Payment History
+
+                    </h3>
+
+
+                </div>
+
+
+                <div class="list-panel">
+
+
+                    {% for p in approved_payments %}
+
+
+                        <div class="list-row row-flex">
+
+
+                            <div>
+
+
+                                <div class="row-title">
+
+                                    {{ p.payer_email }}
+
+                                    →
+
+                                    {{ p.receiver_email }}
+
+                                </div>
+
+
+                                <div class="row-meta">
+
+                                    {{ p.mode }}
+
+                                    · Approved
+
+                                    {{ p.approved_at }}
+
+                                </div>
+
+
+                                {% if p.note %}
+
+
+                                    <div class="row-meta">
+
+                                        {{ p.note }}
+
+                                    </div>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            <div class="row-title">
+
+                                ₹{% widthratio p.amount_paise 100 1 %}
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% empty %}
+
+
+                        <div class="empty-mini">
+
+                            No confirmed payments yet
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- PAYMENTS I HAVE MADE -->
+
+            <div class="section">
+
+
+                <div class="row-head">
+
+
+                    <h3>
+
+                        Payments I've Made
+
+                    </h3>
+
+
+                </div>
+
+
+                <div class="list-panel">
+
+
+                    {% for p in payments_i_made %}
+
+
+                        <div class="list-row">
+
+
+                            <div class="row-flex">
+
+
+                                <div>
+
+
+                                    <div class="row-title">
+
+                                        You paid
+
+                                        {{ p.receiver_email }}
+
+                                    </div>
+
+
+                                    <div class="row-meta">
+
+                                        {{ p.mode }}
+
+                                        ·
+
+                                        {{ p.created_at }}
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="row-title">
+
+                                    ₹{% widthratio p.amount_paise 100 1 %}
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div style="margin-top:8px;">
+
+
+                                {% if p.status == 'approved' %}
+
+
+                                    <span class="tag green">
+
+                                        Approved
+
+                                    </span>
+
+
+                                {% elif p.status == 'rejected' %}
+
+
+                                    <span class="tag red">
+
+                                        Rejected
+
+                                    </span>
+
+
+                                {% else %}
+
+
+                                    <span class="tag gold">
+
+                                        Waiting
+
+                                    </span>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            {% if p.note %}
+
+
+                                <div
+                                    class="row-meta"
+                                    style="margin-top:6px;"
+                                >
+
+                                    {{ p.note }}
+
+                                </div>
+
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% empty %}
+
+
+                        <div class="empty-mini">
+
+                            No payments recorded
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     RIGHT SIDEBAR
+     BECOMES MOBILE CONTENT SECTION
+========================================================= -->
+
+<div class="right">
+
+
+    <!-- AWAITING APPROVAL -->
+
+    <div class="right-block">
+
+
+        <div class="right-head">
+
+
+            <h3>
+
+                Awaiting Approval
+
+            </h3>
+
+
+        </div>
+
+
+
+        {% for p in payments_for_me_to_approve %}
+
+
+            <div
+                style="
+                    padding:9px 0;
+                    border-bottom:1px solid var(--border);
+                "
+            >
+
+
+                <div class="row-flex">
+
+
+                    <div>
+
+
+                        <div class="right-item-title">
+
+                            {{ p.payer_email }}
+
+                        </div>
+
+
+                        <div class="right-item-meta">
+
+                            {{ p.mode }}
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="right-item-title">
+
+                        ₹{% widthratio p.amount_paise 100 1 %}
+
+                    </div>
+
+
+                </div>
+
+
+
+                <form
+                    method="POST"
+                    action="{% url 'approve_payment' p.payment_id %}"
+                    class="form-actions"
+                >
+
+
+                    {% csrf_token %}
+
+
+                    <button
+                        type="submit"
+                        name="action"
+                        value="approve"
+                        class="mini btn-approve"
+                    >
+
+                        Approve
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        name="action"
+                        value="reject"
+                        class="mini btn-reject"
+                    >
+
+                        Reject
+
+                    </button>
+
+
+                </form>
+
+
+            </div>
+
+
+        {% empty %}
+
+
+            <div class="empty-mini">
+
+                Nothing waiting on you
+
+            </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+
+    <!-- MEMBERS -->
+
+    <div class="right-block">
+
+
+        <div class="right-head">
+
+
+            <h3>
+
+                Members
+
+            </h3>
+
+
+            <button
+                type="button"
+                class="members-toggle"
+                onclick="toggleMembers()"
+                id="membersToggleButton"
+            >
+
+                {{ members_list|length }} total
+
+                <span
+                    class="arrow rotate"
+                    id="membersArrow"
+                >
+
+                    ▼
+
+                </span>
+
+            </button>
+
+
+        </div>
+
+
+
+        <div
+            class="members-body show"
+            id="membersBody"
+        >
+
+
+            {% for entry in members_list %}
+
+
+                <div class="right-item">
+
+
+                    <div class="right-avatar">
+
+                        {{ entry.profile.name|slice:":2"|upper }}
+
+                    </div>
+
+
+                    <div>
+
+
+                        <div class="right-item-title">
+
+                            {{ entry.profile.name }}
+
+                        </div>
+
+
+                        <div class="right-item-meta">
+
+                            {{ entry.profile.email }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- GROUP CHAT -->
+
+    <div class="chat-block">
+
+
+        <div class="chat-head">
+
+            <h3>
+
+                Group Chat
+
+            </h3>
+
+            <span class="pulse"></span>
+
+        </div>
+
+
+        <div class="chat-panel">
+
+
+            {% for msg in messages %}
+
+
+                <div class="chat-line">
+
+                    <span class="chat-name">
+
+                        {{ msg.email }}
+
+                    </span>
+
+                    —
+
+                    {{ msg.message_text }}
+
+                    <span class="chat-time">
+
+                        {{ msg.sent_at }}
+
+                    </span>
+
+                </div>
+
+
+            {% empty %}
+
+
+                <div class="empty-mini">
+
+                    No messages yet
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+
+        <form
+            method="POST"
+            action="{% url 'post_group_message' %}"
+            class="chat-form"
+        >
+
+
+            {% csrf_token %}
+
+
+            <input
+                type="text"
+                name="message_text"
+                placeholder="Type a message."
+                maxlength="500"
+                required
+            >
+
+
+            <button type="submit">
+
+                Send
+
+            </button>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+function toggleGroupMenu() {
+
+    const content =
+        document.getElementById(
+            "groupDropdownContent"
+        );
+
+    const arrow =
+        document.getElementById(
+            "dropdownArrow"
+        );
+
+    content.classList.toggle(
+        "show"
+    );
+
+    arrow.classList.toggle(
+        "rotate"
+    );
+
+}
+
+
+function toggleMembers() {
+
+    const body =
+        document.getElementById(
+            "membersBody"
+        );
+
+    const arrow =
+        document.getElementById(
+            "membersArrow"
+        );
+
+    body.classList.toggle(
+        "show"
+    );
+
+    arrow.classList.toggle(
+        "rotate"
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>

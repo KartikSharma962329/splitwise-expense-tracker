@@ -1,0 +1,23 @@
+# Environment variables
+.env
+
+# Virtual environment
+venv/
+
+# Database
+db.sqlite3
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Static files (collected on deploy, don't need to commit)
+staticfiles/
+
+# PyCharm
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

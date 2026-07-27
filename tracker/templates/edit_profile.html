@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Profile — Settlé</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+<style>
+
+/* =========================================================
+   SETTLÉ — EDIT PROFILE
+   PLUM & MINT, CREAM BASE — MATCHES SITE-WIDE SYSTEM
+   DJANGO LOGIC COMPLETELY PRESERVED
+========================================================= */
+
+:root {
+
+    --mint: #5FE0A8;
+    --mint-dark: #3DC48C;
+    --mint-deep: #279A6C;
+
+    --mint-light: #E3FBF0;
+    --mint-soft: #F1FDF7;
+
+    --plum: #3B1F3A;
+    --plum-deep: #26132A;
+
+    --white: #FFFFFF;
+
+    --page-bg: #F7F5EE;
+
+    --text: #1B1D18;
+    --muted: #6E7268;
+    --faint: #A7ABA0;
+
+    --border: #E7E3D6;
+
+    --coral: #E07A4F;
+    --coral-soft: #FCEBE2;
+
+    --gold: #D29F2E;
+    --gold-soft: #FBF1DC;
+
+    --sun: #FFC857;
+
+    --ink: #1B1D18;
+
+}
+
+
+* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    font-family:
+        'Inter',
+        sans-serif;
+
+    background:
+
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(95,224,168,0.16),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(95,224,168,0.12),
+            transparent 25%
+        ),
+
+        linear-gradient(
+            180deg,
+            #FBFAF4,
+            var(--page-bg) 45%,
+            #F2EFE4
+        );
+
+    color:
+        var(--text);
+
+    min-height:
+        100vh;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        24px;
+
+}
+
+
+a {
+
+    text-decoration:
+        none;
+
+    color:
+        inherit;
+
+}
+
+
+button,
+input,
+select,
+textarea {
+
+    font-family:
+        inherit;
+
+}
+
+
+h1 {
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+}
+
+
+::selection {
+
+    background:
+        var(--mint);
+
+    color:
+        var(--plum-deep);
+
+}
+
+
+:focus-visible {
+
+    outline:
+        2px solid var(--mint-dark);
+
+    outline-offset:
+        2px;
+
+    border-radius:
+        6px;
+
+}
+
+
+/* =========================================================
+   ENTRANCE MOTION
+========================================================= */
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.form-shell {
+    animation: fadeUp 0.5s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* =========================================================
+   CARD — boarding-pass styled ticket
+========================================================= */
+
+.form-shell {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    max-width:
+        620px;
+
+    padding:
+        38px 34px 32px;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        26px;
+
+    box-shadow:
+
+        0 30px 80px
+        rgba(38,19,42,0.16);
+
+    overflow:
+        hidden;
+
+}
+
+
+.form-shell::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        220px;
+
+    height:
+        220px;
+
+    top:
+        -120px;
+
+    right:
+        -100px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(95,224,168,0.16);
+
+}
+
+
+.form-shell::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        6px;
+
+    top:
+        0;
+
+    bottom:
+        0;
+
+    left:
+        0;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+}
+
+
+.brand {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin-bottom:
+        26px;
+
+    color:
+        var(--plum);
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        1rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.02em;
+
+}
+
+
+.brand-mark {
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        12px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.9rem;
+
+    font-weight:
+        800;
+
+    box-shadow:
+
+        0 8px 20px
+        rgba(38,19,42,0.20);
+
+    transform:
+        rotate(-4deg);
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+
+.brand:hover .brand-mark {
+
+    transform:
+        rotate(4deg) scale(1.05);
+
+}
+
+
+.header-eyebrow {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        6px 13px;
+
+    margin-bottom:
+        13px;
+
+    border:
+        1px solid
+        var(--mint-light);
+
+    border-radius:
+        30px;
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.70rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.05em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.header-eyebrow .dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--mint-dark);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(95,224,168,0.20);
+
+}
+
+
+h1 {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    font-size:
+        1.5rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.03em;
+
+    margin-bottom:
+        24px;
+
+}
+
+
+/* =========================================================
+   FORM — 2x2 GRID
+========================================================= */
+
+.form-grid {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:
+        18px 16px;
+
+    margin-bottom:
+        18px;
+
+}
+
+
+.form-group {
+
+    margin-bottom:
+        0;
+
+}
+
+
+/* fields that should take the full width of the grid */
+
+.form-group.span-2 {
+
+    grid-column:
+        1 / -1;
+
+}
+
+
+.form-group label {
+
+    display:
+        block;
+
+    margin-bottom:
+        7px;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        700;
+
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+    width:
+        100%;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        11px;
+
+    background:
+        white;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.82rem;
+
+    transition:
+        all 0.2s ease;
+
+}
+
+
+.form-group input,
+.form-group select {
+
+    height:
+        43px;
+
+}
+
+
+.form-group select {
+
+    appearance:
+        none;
+
+    cursor:
+        pointer;
+
+    padding-right:
+        38px;
+
+    background-image:
+
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            var(--mint-deep) 50%
+        ),
+
+        linear-gradient(
+            135deg,
+            var(--mint-deep) 50%,
+            transparent 50%
+        );
+
+    background-position:
+
+        calc(100% - 20px) center,
+        calc(100% - 15px) center;
+
+    background-size:
+
+        5px 5px,
+        5px 5px;
+
+    background-repeat:
+        no-repeat;
+
+}
+
+
+.form-group textarea {
+
+    height:
+        90px;
+
+    padding:
+        11px 13px;
+
+    resize:
+        vertical;
+
+    line-height:
+        1.6;
+
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+    outline:
+        none;
+
+    border-color:
+        var(--mint-dark);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(95,224,168,0.14);
+
+}
+
+
+.char-hint {
+
+    display:
+        block;
+
+    margin-top:
+        6px;
+
+    color:
+        var(--faint);
+
+    font-size:
+        0.68rem;
+
+}
+
+
+/* =========================================================
+   ACTIONS — dashed tear-line divider
+========================================================= */
+
+.form-actions {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        flex;
+
+    gap:
+        9px;
+
+    padding-top:
+        20px;
+
+    background:
+
+        repeating-linear-gradient(
+            to right,
+            #D7D2C1 0,
+            #D7D2C1 6px,
+            transparent 6px,
+            transparent 13px
+        )
+        top / 100% 1.5px
+        no-repeat;
+
+}
+
+
+.btn {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex:
+        1;
+
+    padding:
+        13px 20px;
+
+    border:
+        none;
+
+    border-radius:
+        20px;
+
+    font-size:
+        0.80rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        all 0.25s ease;
+
+}
+
+
+.btn:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.btn-primary {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    box-shadow:
+
+        0 7px 18px
+        rgba(0,0,0,0.18);
+
+}
+
+
+.btn-secondary {
+
+    background:
+        #FFFFFF;
+
+    color:
+        var(--muted);
+
+    border:
+        1px solid
+        var(--border);
+
+}
+
+
+.btn-secondary:hover {
+
+    color:
+        var(--mint-deep);
+
+    border-color:
+        var(--mint-dark);
+
+}
+
+
+@media(max-width:560px) {
+
+    .form-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .form-group.span-2 {
+
+        grid-column:
+            1;
+
+    }
+
+}
+
+
+@media(max-width:520px) {
+
+    .form-shell {
+
+        padding:
+            30px 22px 26px;
+
+    }
+
+
+    .form-actions {
+
+        flex-direction:
+            column;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="form-shell">
+
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            S
+        </div>
+
+        Settlé
+
+    </div>
+
+
+    <div class="header-eyebrow">
+
+        <span class="dot"></span>
+
+        Profile settings
+
+    </div>
+
+
+    <h1>Edit Your Profile</h1>
+
+
+    <!-- =================================================
+         ORIGINAL DJANGO FORM
+         LOGIC PRESERVED
+    ================================================== -->
+
+    <form method="POST" action="{% url 'edit_profile' %}">
+
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Full name</label>
+                <input type="text" name="name" value="{{ profile.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Nickname</label>
+                <input type="text" name="nickname" value="{{ profile.nickname }}">
+            </div>
+
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone" value="{{ profile.phone }}">
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <select name="gender">
+                    <option value="">Select</option>
+                    <option value="male" {% if profile.gender == 'male' %}selected{% endif %}>Male</option>
+                    <option value="female" {% if profile.gender == 'female' %}selected{% endif %}>Female</option>
+                    <option value="other" {% if profile.gender == 'other' %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>UPI ID</label>
+                <input type="text" name="upi_id" value="{{ profile.upi_id }}">
+            </div>
+
+            <div class="form-group span-2">
+                <label>Bio</label>
+                <textarea name="bio" maxlength="150">{{ profile.bio }}</textarea>
+                <span class="char-hint">Max 150 characters</span>
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+
+            <a href="{% url 'member_home' %}">
+                <button type="button" class="btn btn-secondary">Cancel</button>
+            </a>
+        </div>
+
+    </form>
+
+
+</div>
+
+
+</body>
+
+</html>

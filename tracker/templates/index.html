@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settlé — Expense Tracker</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+<style>
+
+/* =========================================================
+   SETTLÉ INDEX PAGE
+   RESTYLED — PLUM & MINT (PLAYFUL, DISTINCTIVE), CREAM BASE
+   DJANGO LOGIC UNTOUCHED
+========================================================= */
+
+:root {
+
+    /* accent — fresh mint, used sparingly against deep plum */
+    --mint: #5FE0A8;
+    --mint-dark: #3DC48C;
+    --mint-deep: #279A6C;
+
+    --mint-light: #E3FBF0;
+    --mint-soft: #F1FDF7;
+
+    /* deep plum, replaces charcoal for nav/footer — playful, distinctive */
+    --plum: #3B1F3A;
+    --plum-deep: #26132A;
+
+    --white: #FFFFFF;
+
+    /* warmer, cream page base instead of flat grey */
+    --page-bg: #F7F5EE;
+
+    --text: #1B1D18;
+    --muted: #6E7268;
+    --faint: #A7ABA0;
+
+    --border: #E7E3D6;
+
+    /* softened from alert-red to a warm coral so "you owe" doesn't read as an error */
+    --coral: #E07A4F;
+    --gold: #D29F2E;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+
+    background:
+        radial-gradient(circle at 8% 8%, rgba(95,224,168,0.14), transparent 26%),
+        radial-gradient(circle at 92% 88%, rgba(95,224,168,0.10), transparent 30%),
+        linear-gradient(180deg, #FBFAF4, var(--page-bg) 40%, #F2EFE4);
+
+    min-height: 100vh;
+    overflow-x: hidden;
+
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: 'Inter', sans-serif;
+}
+
+
+/* =========================================================
+   DECORATIVE BACKGROUND BLOBS — quieter, fewer, smaller
+========================================================= */
+
+.blob {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(6px);
+}
+
+.blob1 {
+    width: 340px;
+    height: 340px;
+    top: -160px;
+    right: -110px;
+    background: radial-gradient(circle, rgba(95,224,168,0.18), rgba(95,224,168,0));
+}
+
+.blob2 {
+    width: 260px;
+    height: 260px;
+    bottom: -130px;
+    left: -110px;
+    background: radial-gradient(circle, rgba(59,31,58,0.08), rgba(59,31,58,0));
+}
+
+
+/* =========================================================
+   TOP NAVIGATION
+   Deep plum solid so white text meets real contrast, with mint
+   reserved for accents only — playful without losing polish.
+========================================================= */
+
+.topbar {
+
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    padding: 18px 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+
+    background: linear-gradient(135deg, var(--plum), var(--plum-deep));
+    border-radius: 0 0 22px 22px;
+    box-shadow: 0 8px 24px rgba(38,19,42,0.24);
+
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #FFFFFF;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.logo-mark {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: var(--mint);
+    color: var(--plum-deep);
+    font-size: 0.95rem;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+
+
+/* =========================================================
+   NAV LINKS
+   Now real interactive buttons (still no page navigation) —
+   clicking toggles the info panel below the navbar. Kept the
+   same visual look as before, just swapped span -> button and
+   added an active state.
+========================================================= */
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-links button.nav-link {
+    position: relative;
+    background: none;
+    border: none;
+    padding: 0;
+    color: rgba(255,255,255,0.80);
+    font-size: 0.80rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.nav-links button.nav-link:hover {
+    color: #FFFFFF;
+}
+
+.nav-links button.nav-link.current,
+.nav-links button.nav-link.active {
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.nav-links button.nav-link.current::after,
+.nav-links button.nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    height: 3px;
+    border-radius: 10px;
+    background: var(--mint);
+}
+
+
+/* =========================================================
+   NAV ACTIONS
+========================================================= */
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.nav-pill {
+    color: rgba(255,255,255,0.78);
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+
+.nav-cta {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    background: var(--mint);
+    color: var(--plum-deep);
+    font-size: 0.74rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.16);
+    transition: all 0.22s ease;
+}
+
+.nav-cta:hover {
+    transform: translateY(-2px);
+    background: #FFFFFF;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.20);
+}
+
+
+/* =========================================================
+   HAMBURGER TOGGLE — mobile nav
+========================================================= */
+
+.nav-toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.10);
+    cursor: pointer;
+    flex-direction: column;
+    gap: 4px;
+    transition: background 0.2s ease;
+}
+
+.nav-toggle:hover {
+    background: rgba(255,255,255,0.18);
+}
+
+.nav-toggle .bar {
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: #FFFFFF;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.nav-toggle.open .bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.nav-toggle.open .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.open .bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+
+/* =========================================================
+   MOBILE NAV DROPDOWN
+   Reuses .nav-links but repositioned as a dropdown below
+   1000px instead of being hidden entirely.
+========================================================= */
+
+@media(max-width:1000px) {
+
+    .nav-toggle {
+        display: flex;
+    }
+
+    .nav-links {
+        display: flex;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 6%;
+        right: 6%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 10px;
+        background: linear-gradient(135deg, var(--plum), var(--plum-deep));
+        border-radius: 16px;
+        box-shadow: 0 14px 30px rgba(38,19,42,0.30);
+
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: max-height 0.3s ease, opacity 0.25s ease;
+    }
+
+    .nav-links.mobile-open {
+        max-height: 320px;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .nav-links button.nav-link {
+        width: 100%;
+        padding: 12px 10px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+    }
+
+    .nav-links button.nav-link:hover,
+    .nav-links button.nav-link.active {
+        background: rgba(255,255,255,0.08);
+    }
+
+    .nav-links button.nav-link.current::after,
+    .nav-links button.nav-link.active::after {
+        display: none;
+    }
+
+    .topbar {
+        position: relative;
+    }
+}
+
+
+/* =========================================================
+   INFO PANEL — expands below the navbar when a nav item
+   is clicked. Same plum/mint/cream theme as the rest of
+   the page, card-on-cream so it reads as "content", not nav.
+========================================================= */
+
+.info-panel {
+    position: relative;
+    z-index: 4;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.42s ease, opacity 0.32s ease, padding 0.42s ease;
+    background: var(--page-bg);
+}
+
+.info-panel.open {
+    max-height: 600px;
+    opacity: 1;
+}
+
+.info-panel-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 6%;
+}
+
+.info-panel.open .info-panel-inner {
+    padding-top: 28px;
+    padding-bottom: 8px;
+}
+
+.info-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px 34px;
+    box-shadow: 0 14px 30px rgba(38,19,42,0.10);
+    display: none;
+}
+
+.info-card.active {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: fadeSlide 0.35s ease;
+}
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.info-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.info-card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.info-card-icon {
+    width: 38px;
+    height: 38px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: var(--mint-light);
+    color: var(--mint-deep);
+    font-size: 1rem;
+    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+}
+
+.info-card-close {
+    width: 30px;
+    height: 30px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--page-bg);
+    color: var(--muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.info-card-close:hover {
+    background: var(--mint-light);
+    color: var(--mint-deep);
+    border-color: rgba(39,154,108,0.24);
+}
+
+.info-card-body {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.75;
+}
+
+.info-card-body b {
+    color: var(--text);
+    font-weight: 700;
+}
+
+.info-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 4px;
+}
+
+.info-tags span {
+    padding: 6px 13px;
+    border-radius: 20px;
+    background: var(--mint-light);
+    color: var(--mint-deep);
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+.page {
+    position: relative;
+    z-index: 2;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    padding: 70px 6%;
+}
+
+.layout {
+    width: 100%;
+    max-width: 1180px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 70px;
+}
+
+
+/* =========================================================
+   LEFT HERO
+========================================================= */
+
+.left {
+    flex: 1.2;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 15px;
+    margin-bottom: 22px;
+    border: 1px solid rgba(39,154,108,0.24);
+    border-radius: 30px;
+    background: var(--mint-light);
+    color: var(--mint-deep);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.eyebrow .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--mint-dark);
+    box-shadow: 0 0 0 5px rgba(61,196,140,0.28);
+}
+
+
+/* =========================================================
+   HEADLINE — slightly less maximal weight/size, more warmth
+========================================================= */
+
+.headline {
+    max-width: 640px;
+    margin-bottom: 20px;
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(2.5rem, 4.4vw, 3.9rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+}
+
+.headline .accent {
+    color: var(--mint-deep);
+    position: relative;
+}
+
+.headline .accent::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 8px;
+    border-radius: 10px;
+    background: rgba(61,196,140,0.38);
+    z-index: -1;
+}
+
+
+/* =========================================================
+   SUBTEXT
+========================================================= */
+
+.subtext {
+    max-width: 490px;
+    margin-bottom: 30px;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+.subtext b {
+    color: var(--text);
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   BUTTON GROUP
+========================================================= */
+
+.btn-group {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.btn-group button {
+    padding: 14px 25px;
+    border-radius: 13px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.22s ease;
+}
+
+.btn-primary {
+    border: none;
+    background: linear-gradient(135deg, var(--mint), var(--mint-dark));
+    color: var(--plum-deep);
+    box-shadow: 0 8px 18px rgba(184,214,46,0.34);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 22px rgba(61,196,140,0.38);
+}
+
+.btn-secondary {
+    border: 1.5px solid var(--border);
+    background: #FFFFFF;
+    color: var(--text);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-3px);
+    border-color: var(--mint-dark);
+    color: var(--mint-deep);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+}
+
+
+/* =========================================================
+   RIGHT SIDE
+========================================================= */
+
+.right {
+    flex: 0 0 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+
+/* =========================================================
+   COIN STAGE
+========================================================= */
+
+.coin-stage {
+    width: 300px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+.coin {
+    width: 132px;
+    height: 132px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: bob 3.5s ease-in-out infinite;
+    filter: drop-shadow(0 16px 16px rgba(38,19,42,0.26));
+}
+
+.coin .face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.1rem;
+    font-weight: 700;
+}
+
+.coin .front {
+    background: linear-gradient(145deg, #B9F5DA, var(--mint) 50%, var(--mint-dark));
+    color: var(--plum-deep);
+    border: 5px solid #8CEBBE;
+    box-shadow: inset 0 0 0 5px rgba(255,255,255,0.18);
+}
+
+.coin .back {
+    background: linear-gradient(145deg, var(--mint-dark), var(--mint-deep) 55%, #17553C);
+    color: #E9FFF3;
+    border: 5px solid var(--mint-deep);
+    transform: rotateY(180deg);
+    box-shadow: inset 0 0 0 5px rgba(255,255,255,0.10);
+}
+
+@keyframes bob {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: -14px; }
+}
+
+.coin-shadow {
+    width: 130px;
+    height: 16px;
+    margin-top: -6px;
+    border-radius: 50%;
+    background: rgba(38,19,42,0.14);
+    animation: shrink-shadow 3.5s ease-in-out infinite;
+}
+
+@keyframes shrink-shadow {
+    0%, 100% { transform: scale(1); opacity: 0.45; }
+    50% { transform: scale(0.75); opacity: 0.22; }
+}
+
+
+/* =========================================================
+   RECEIPT CARD — signature element
+========================================================= */
+
+.receipt {
+    width: 290px;
+    margin-top: 22px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 14px 30px rgba(38,19,42,0.10);
+    overflow: visible;
+}
+
+.receipt-head {
+    padding: 18px 22px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.receipt-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.receipt-tag {
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--mint-light);
+    color: var(--mint-deep);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.receipt-avatars {
+    display: flex;
+    align-items: center;
+    padding: 0 22px 16px;
+}
+
+.receipt-avatars .chip {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    border: 2.5px solid #FFFFFF;
+    margin-left: -9px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+}
+
+.receipt-avatars .chip:first-child {
+    margin-left: 0;
+}
+
+.receipt-avatars .chip.c1 { background: var(--mint-dark); }
+.receipt-avatars .chip.c2 { background: var(--coral); }
+.receipt-avatars .chip.c3 { background: var(--gold); }
+.receipt-avatars .chip.more {
+    background: var(--plum);
+    font-size: 0.6rem;
+}
+
+.receipt-avatars .count {
+    margin-left: 10px;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 500;
+}
+
+.receipt-perf {
+    height: 1px;
+    margin: 0 22px;
+    border-top: 1.5px dashed #DCD7C6;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 22px;
+}
+
+.stat-row + .stat-row {
+    border-top: 1px dashed #EFEBDD;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+
+.stat-value {
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.92rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-value.neg {
+    color: var(--coral);
+}
+
+.stat-value.pos {
+    color: var(--mint-deep);
+}
+
+.receipt-tear {
+    width: 290px;
+    height: 16px;
+    margin-top: -1px;
+    background: #FFFFFF;
+    -webkit-mask-image: radial-gradient(circle at 10px 0, transparent 9px, black 9.5px);
+    mask-image: radial-gradient(circle at 10px 0, transparent 9px, black 9.5px);
+    -webkit-mask-size: 20px 20px;
+    mask-size: 20px 20px;
+    -webkit-mask-repeat: repeat-x;
+    mask-repeat: repeat-x;
+    filter: drop-shadow(0 6px 8px rgba(59,31,58,0.08));
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.site-footer {
+    position: relative;
+    z-index: 3;
+    padding: 65px 6% 35px;
+    background: linear-gradient(180deg, var(--plum), var(--plum-deep));
+    color: #FFFFFF;
+    box-shadow: 0 -8px 24px rgba(38,19,42,0.18);
+}
+
+.footer-grid {
+    width: 100%;
+    max-width: 1180px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 110px;
+    flex-wrap: wrap;
+}
+
+.footer-brand {
+    flex: 1.3;
+    min-width: 280px;
+}
+
+.footer-about {
+    max-width: 360px;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.82rem;
+    line-height: 1.85;
+}
+
+.footer-col {
+    flex: 0.6;
+    min-width: 160px;
+}
+
+.footer-brand .logo {
+    margin-bottom: 15px;
+}
+
+.footer-brand .logo-mark {
+    color: var(--plum-deep);
+}
+
+.footer-col h4 {
+    margin-bottom: 16px;
+    color: #FFFFFF;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.footer-col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    list-style: none;
+}
+
+.footer-col ul li {
+    list-style: none;
+}
+
+.footer-col ul span {
+    color: rgba(255,255,255,0.72);
+    font-size: 0.74rem;
+    cursor: default;
+    transition: 0.2s ease;
+}
+
+.footer-col ul span:hover {
+    color: var(--mint);
+    transform: translateX(3px);
+}
+
+/* wired footer items — actually open an info panel */
+.footer-col ul button.footer-link {
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    color: rgba(255,255,255,0.72);
+    font-size: 0.74rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.footer-col ul button.footer-link:hover {
+    color: var(--mint);
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   FOOTER BOTTOM
+========================================================= */
+
+.footer-bottom {
+    width: 100%;
+    max-width: 1180px;
+    margin: 40px auto 0;
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border-top: 1px solid rgba(255,255,255,0.14);
+}
+
+.footer-bottom > span {
+    color: rgba(255,255,255,0.60);
+    font-size: 0.68rem;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px) {
+    .layout { gap: 35px; }
+    .right { flex: 0 0 350px; }
+    .headline { font-size: 3rem; }
+}
+
+@media(max-width:800px) {
+    .page { padding: 55px 7%; }
+    .layout { flex-direction: column; text-align: center; }
+    .left { display: flex; flex-direction: column; align-items: center; }
+    .subtext { margin-left: auto; margin-right: auto; }
+    .btn-group { justify-content: center; }
+    .right { width: 100%; flex: none; }
+    .headline { font-size: 2.7rem; }
+    .site-footer { padding: 45px 7% 25px; }
+    .info-card-head { flex-wrap: wrap; }
+}
+
+@media(max-width:600px) {
+    .topbar { padding: 15px 5%; }
+    .nav-pill { display: none; }
+    .logo { font-size: 1.05rem; }
+    .logo-mark { width: 32px; height: 32px; }
+    .page { min-height: auto; padding: 55px 6% 70px; }
+    .headline { font-size: 2.2rem; }
+    .subtext { font-size: 0.9rem; }
+    .btn-group { flex-direction: column; width: 100%; max-width: 280px; }
+    .btn-group a, .btn-group button { width: 100%; }
+    .right { transform: scale(0.90); margin-top: -15px; }
+    .footer-grid { flex-direction: column; gap: 35px; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .info-card { padding: 22px 20px; }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- Decorative background -->
+
+<div class="blob blob1"></div>
+
+<div class="blob blob2"></div>
+
+
+
+<!-- =========================================================
+     TOP NAVBAR
+     DJANGO LOGIC PRESERVED
+     Nav items are now buttons that toggle the info panel below.
+     Hamburger toggle added for mobile — reveals .nav-links as
+     a dropdown below 1000px instead of hiding them.
+========================================================= -->
+
+<div class="topbar">
+
+
+    <div class="logo">
+
+        <div class="logo-mark">
+
+            S
+
+        </div>
+
+        Settlé
+
+    </div>
+
+
+
+    <div class="nav-links" id="navLinks">
+
+        <button type="button" class="nav-link current" data-panel="home">Home</button>
+
+        <button type="button" class="nav-link" data-panel="features">Features</button>
+
+        <button type="button" class="nav-link" data-panel="how">How it works</button>
+
+        <button type="button" class="nav-link" data-panel="pricing">Pricing</button>
+
+        <button type="button" class="nav-link" data-panel="support">Support</button>
+
+    </div>
+
+
+
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
+
+
+
+    <div class="nav-actions">
+
+
+        <span class="nav-pill">
+
+            Simple expense splitting
+
+        </span>
+
+
+        <a href="{% url 'login_view' %}">
+
+            <button class="nav-cta">
+
+                Login
+
+            </button>
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     INFO PANEL
+     Expands below navbar; shows the card matching the clicked
+     nav item. Pure presentational JS — no Django logic touched.
+========================================================= -->
+
+<div class="info-panel" id="infoPanel">
+
+    <div class="info-panel-inner">
+
+        <div class="info-card" data-card="features">
+            <div class="info-card-head">
+                <div class="info-card-title">
+                    <span class="info-card-icon">✦</span>
+                    Features
+                </div>
+                <button type="button" class="info-card-close" data-close>&times;</button>
+            </div>
+            <div class="info-card-body">
+                Everything you need to keep shared money simple: <b>add a bill in seconds</b>, split it evenly or by custom shares, and let Settlé work out exactly who owes who. Every expense is tracked in one place so nobody has to scroll through a group chat to remember who paid last time.
+            </div>
+            <div class="info-tags">
+                <span>Bill splitting</span>
+                <span>Group balances</span>
+                <span>Multi-currency</span>
+                <span>Activity history</span>
+            </div>
+        </div>
+
+        <div class="info-card" data-card="how">
+            <div class="info-card-head">
+                <div class="info-card-title">
+                    <span class="info-card-icon">→</span>
+                    How it works
+                </div>
+                <button type="button" class="info-card-close" data-close>&times;</button>
+            </div>
+            <div class="info-card-body">
+                <b>1. Create a group</b> for your trip, flat, or event. <b>2. Add expenses</b> as they happen — Settlé splits each one automatically. <b>3. Settle up</b> whenever you're ready, with a clear summary of who pays who and how much, no manual math required.
+            </div>
+            <div class="info-tags">
+                <span>Create group</span>
+                <span>Add expense</span>
+                <span>Settle up</span>
+            </div>
+        </div>
+
+        <div class="info-card" data-card="pricing">
+            <div class="info-card-head">
+                <div class="info-card-title">
+                    <span class="info-card-icon">₹</span>
+                    Pricing
+                </div>
+                <button type="button" class="info-card-close" data-close>&times;</button>
+            </div>
+            <div class="info-card-body">
+                Settlé is <b>free to use</b> for individuals and groups — track unlimited expenses, unlimited groups, and unlimited settlements at no cost. No hidden fees, no card required to get started.
+            </div>
+            <div class="info-tags">
+                <span>Free forever</span>
+                <span>Unlimited groups</span>
+                <span>No card needed</span>
+            </div>
+        </div>
+
+        <div class="info-card" data-card="support">
+            <div class="info-card-head">
+                <div class="info-card-title">
+                    <span class="info-card-icon">?</span>
+                    Support
+                </div>
+                <button type="button" class="info-card-close" data-close>&times;</button>
+            </div>
+            <div class="info-card-body">
+                Stuck on something, or spotted a bug? Reach out through the <b>help center</b> or <b>contact us</b> links in the footer below, and we'll get back to you as soon as we can.
+            </div>
+            <div class="info-tags">
+                <span>Help center</span>
+                <span>Contact us</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     MAIN HERO
+     DJANGO LOGIC PRESERVED
+========================================================= -->
+
+<div class="page">
+
+
+    <div class="layout">
+
+
+        <!-- LEFT -->
+
+        <div class="left">
+
+
+            <div class="eyebrow">
+
+                <span class="dot"></span>
+
+                Trusted by groups everywhere
+
+            </div>
+
+
+
+            <h1 class="headline">
+
+                Split expenses
+
+                <br>
+
+                without the
+
+                <span class="accent">
+
+                    awkward math
+
+                </span>
+
+            </h1>
+
+
+
+            <p class="subtext">
+
+                Track group expenses, split fairly, and stop stressing about
+
+                <b>
+
+                    who owes who
+
+                </b>.
+
+                Add a bill, and Settlé handles the rest.
+
+            </p>
+
+
+
+            <div class="btn-group">
+
+
+                <!-- DJANGO LOGIC UNTOUCHED -->
+
+                <a href="{% url 'login_view' %}">
+
+                    <button class="btn-primary">
+
+                        Existing User
+
+                    </button>
+
+                </a>
+
+
+
+                <!-- DJANGO LOGIC UNTOUCHED -->
+
+                <a href="{% url 'userprofile_add' %}">
+
+                    <button class="btn-secondary">
+
+                        New User
+
+                    </button>
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- RIGHT -->
+
+        <div class="right">
+
+
+            <!-- ANIMATED COIN -->
+
+            <div class="coin-stage">
+
+
+                <div class="coin">
+
+
+                    <div class="face front">
+
+                        &#8377;
+
+                    </div>
+
+
+                    <div class="face back">
+
+                        $
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="coin-shadow"></div>
+
+
+
+            <!-- RECEIPT CARD -->
+
+            <div class="receipt">
+
+
+                <div class="receipt-head">
+
+                    <span class="receipt-title">Goa Trip — Group</span>
+
+                    <span class="receipt-tag">Active</span>
+
+                </div>
+
+
+                <div class="receipt-avatars">
+
+                    <span class="chip c1">R</span>
+
+                    <span class="chip c2">A</span>
+
+                    <span class="chip c3">M</span>
+
+                    <span class="chip more">+2</span>
+
+                    <span class="count">Split 5 ways</span>
+
+                </div>
+
+
+                <div class="receipt-perf"></div>
+
+
+                <div class="stat-row">
+
+                    <span class="stat-label">Total balance</span>
+
+                    <span class="stat-value">&#8377;182.00</span>
+
+                </div>
+
+
+                <div class="stat-row">
+
+                    <span class="stat-label">You owe</span>
+
+                    <span class="stat-value neg">&#8377;102.61</span>
+
+                </div>
+
+
+                <div class="stat-row">
+
+                    <span class="stat-label">You are owed</span>
+
+                    <span class="stat-value pos">&#8377;284.61</span>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="receipt-tear"></div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     FOOTER
+     CONTENT PRESERVED
+========================================================= -->
+
+<footer class="site-footer">
+
+
+    <div class="footer-grid">
+
+
+        <div class="footer-brand">
+
+
+            <div class="logo">
+
+
+                <div class="logo-mark">
+
+                    S
+
+                </div>
+
+                Settlé
+
+
+            </div>
+
+
+
+            <p class="footer-about">
+
+                Settlé helps friends, roommates, and travel groups track shared expenses and settle up fairly, without the awkward math or the group chat math debates.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="footer-col">
+
+
+            <h4>
+
+                Product
+
+            </h4>
+
+
+            <ul>
+
+                <li><button type="button" class="footer-link" data-panel="features">Features</button></li>
+
+                <li><button type="button" class="footer-link" data-panel="how">How it works</button></li>
+
+                <li><button type="button" class="footer-link" data-panel="pricing">Pricing</button></li>
+
+            </ul>
+
+
+        </div>
+
+
+
+        <div class="footer-col">
+
+
+            <h4>
+
+                Support
+
+            </h4>
+
+
+            <ul>
+
+                <li><button type="button" class="footer-link" data-panel="support">Help center</button></li>
+
+                <li><button type="button" class="footer-link" data-panel="support">Contact us</button></li>
+
+            </ul>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="footer-bottom">
+
+
+        <span>
+
+            &copy; 2026 Settlé. All rights reserved.
+
+        </span>
+
+
+    </div>
+
+
+</footer>
+
+
+<!-- =========================================================
+     NAV PANEL TOGGLE SCRIPT
+     Presentational only — no Django logic involved.
+     Includes mobile hamburger dropdown toggle.
+========================================================= -->
+
+<script>
+(function () {
+    var panel = document.getElementById('infoPanel');
+    var navButtons = document.querySelectorAll('.nav-link');
+    var cards = document.querySelectorAll('.info-card');
+    var closeButtons = document.querySelectorAll('[data-close]');
+    var navToggle = document.getElementById('navToggle');
+    var navLinksEl = document.getElementById('navLinks');
+
+    function closePanel() {
+        panel.classList.remove('open');
+        cards.forEach(function (c) { c.classList.remove('active'); });
+        navButtons.forEach(function (b) { b.classList.remove('active'); });
+    }
+
+    function closeMobileNav() {
+        navLinksEl.classList.remove('mobile-open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function openPanel(key, btn) {
+        var card = document.querySelector('.info-card[data-card="' + key + '"]');
+        if (!card) { closePanel(); return; }
+
+        cards.forEach(function (c) { c.classList.remove('active'); });
+        card.classList.add('active');
+
+        navButtons.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+
+        panel.classList.add('open');
+    }
+
+    navButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var key = btn.getAttribute('data-panel');
+
+            // "Home" just closes the panel — it has no info card
+            if (key === 'home') {
+                closePanel();
+                navButtons.forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('current');
+                closeMobileNav();
+                return;
+            }
+
+            var alreadyOpen = btn.classList.contains('active') && panel.classList.contains('open');
+            if (alreadyOpen) {
+                closePanel();
+            } else {
+                navButtons.forEach(function (b) { b.classList.remove('current'); });
+                openPanel(key, btn);
+            }
+
+            closeMobileNav();
+        });
+    });
+
+    closeButtons.forEach(function (b) {
+        b.addEventListener('click', closePanel);
+    });
+
+    // Hamburger toggle — mobile only (CSS hides it above 1000px)
+    navToggle.addEventListener('click', function () {
+        var isOpen = navLinksEl.classList.toggle('mobile-open');
+        navToggle.classList.toggle('open', isOpen);
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    // Footer links (Product/Support columns) open the same info
+    // panel as their navbar counterparts, scrolling up to reveal it.
+    var footerLinks = document.querySelectorAll('.footer-link[data-panel]');
+    footerLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+            var key = link.getAttribute('data-panel');
+            var navBtn = document.querySelector('.nav-link[data-panel="' + key + '"]');
+
+            navButtons.forEach(function (b) { b.classList.remove('current'); });
+            openPanel(key, navBtn || link);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+})();
+</script>
+
+
+</body>
+
+</html>

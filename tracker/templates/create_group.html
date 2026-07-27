@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Group — Settlé</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+<style>
+
+/* =========================================================
+   SETTLÉ — CREATE GROUP
+   PLUM & MINT, CREAM BASE — MATCHES SITE-WIDE SYSTEM
+   DJANGO LOGIC COMPLETELY PRESERVED
+========================================================= */
+
+:root {
+
+    --mint: #5FE0A8;
+    --mint-dark: #3DC48C;
+    --mint-deep: #279A6C;
+
+    --mint-light: #E3FBF0;
+    --mint-soft: #F1FDF7;
+
+    --plum: #3B1F3A;
+    --plum-deep: #26132A;
+
+    --white: #FFFFFF;
+
+    --page-bg: #F7F5EE;
+
+    --text: #1B1D18;
+    --muted: #6E7268;
+    --faint: #A7ABA0;
+
+    --border: #E7E3D6;
+
+    --coral: #E07A4F;
+    --coral-soft: #FCEBE2;
+
+    --gold: #D29F2E;
+    --gold-soft: #FBF1DC;
+
+    --sun: #FFC857;
+
+    --ink: #1B1D18;
+
+}
+
+
+* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    font-family:
+        'Inter',
+        sans-serif;
+
+    background:
+
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(95,224,168,0.16),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(95,224,168,0.12),
+            transparent 25%
+        ),
+
+        linear-gradient(
+            180deg,
+            #FBFAF4,
+            var(--page-bg) 45%,
+            #F2EFE4
+        );
+
+    color:
+        var(--text);
+
+    min-height:
+        100vh;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        24px;
+
+}
+
+
+a {
+
+    text-decoration:
+        none;
+
+    color:
+        inherit;
+
+}
+
+
+button,
+input {
+
+    font-family:
+        inherit;
+
+}
+
+
+h1 {
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+}
+
+
+::selection {
+
+    background:
+        var(--mint);
+
+    color:
+        var(--plum-deep);
+
+}
+
+
+:focus-visible {
+
+    outline:
+        2px solid var(--mint-dark);
+
+    outline-offset:
+        2px;
+
+    border-radius:
+        6px;
+
+}
+
+
+/* =========================================================
+   ENTRANCE MOTION
+========================================================= */
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.form-shell {
+    animation: fadeUp 0.5s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* =========================================================
+   CARD — boarding-pass styled ticket
+========================================================= */
+
+.form-shell {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    max-width:
+        440px;
+
+    padding:
+        38px 34px 32px;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        26px;
+
+    box-shadow:
+
+        0 30px 80px
+        rgba(38,19,42,0.16);
+
+    overflow:
+        hidden;
+
+}
+
+
+.form-shell::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        220px;
+
+    height:
+        220px;
+
+    top:
+        -120px;
+
+    right:
+        -100px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(95,224,168,0.16);
+
+}
+
+
+.form-shell::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        6px;
+
+    top:
+        0;
+
+    bottom:
+        0;
+
+    left:
+        0;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+}
+
+
+.brand {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin-bottom:
+        26px;
+
+    color:
+        var(--plum);
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        1rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.02em;
+
+}
+
+
+.brand-mark {
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        12px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.9rem;
+
+    font-weight:
+        800;
+
+    box-shadow:
+
+        0 8px 20px
+        rgba(38,19,42,0.20);
+
+    transform:
+        rotate(-4deg);
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+
+.brand:hover .brand-mark {
+
+    transform:
+        rotate(4deg) scale(1.05);
+
+}
+
+
+.header-eyebrow {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        6px 13px;
+
+    margin-bottom:
+        13px;
+
+    border:
+        1px solid
+        var(--mint-light);
+
+    border-radius:
+        30px;
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.70rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.05em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.header-eyebrow .dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--mint-dark);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(95,224,168,0.20);
+
+}
+
+
+h1 {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    font-size:
+        1.5rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.03em;
+
+    margin-bottom:
+        6px;
+
+}
+
+
+.subtext {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.82rem;
+
+    line-height:
+        1.6;
+
+    margin-bottom:
+        26px;
+
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-group {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    margin-bottom:
+        18px;
+
+}
+
+
+.form-group label {
+
+    display:
+        block;
+
+    margin-bottom:
+        7px;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        700;
+
+}
+
+
+.form-group input {
+
+    width:
+        100%;
+
+    height:
+        43px;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        11px;
+
+    background:
+        white;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.82rem;
+
+    transition:
+        all 0.2s ease;
+
+}
+
+
+.form-group input:focus {
+
+    outline:
+        none;
+
+    border-color:
+        var(--mint-dark);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(95,224,168,0.14);
+
+}
+
+
+/* =========================================================
+   ACTIONS — dashed tear-line divider
+========================================================= */
+
+.form-actions {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    padding-top:
+        20px;
+
+    background:
+
+        repeating-linear-gradient(
+            to right,
+            #D7D2C1 0,
+            #D7D2C1 6px,
+            transparent 6px,
+            transparent 13px
+        )
+        top / 100% 1.5px
+        no-repeat;
+
+}
+
+
+.btn {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        100%;
+
+    padding:
+        13px 20px;
+
+    border:
+        none;
+
+    border-radius:
+        20px;
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        all 0.25s ease;
+
+}
+
+
+.btn:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.btn-primary {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    box-shadow:
+
+        0 7px 18px
+        rgba(0,0,0,0.18);
+
+}
+
+
+@media(max-width:500px) {
+
+    .form-shell {
+
+        padding:
+            30px 22px 26px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="form-shell">
+
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            S
+        </div>
+
+        Settlé
+
+    </div>
+
+
+    <div class="header-eyebrow">
+
+        <span class="dot"></span>
+
+        New group
+
+    </div>
+
+
+    <h1>Create a Group</h1>
+
+    <p class="subtext">Give your group a name and a short description so members know what it's for.</p>
+
+
+    <!-- =================================================
+         ORIGINAL DJANGO FORM
+         LOGIC PRESERVED
+    ================================================== -->
+
+    <form method="POST" action="{% url 'create_group' %}">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Group Name:</label>
+            <input type="text" name="group_name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Description:</label>
+            <input type="text" name="description">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+
+    </form>
+
+
+</div>
+
+
+</body>
+
+</html>

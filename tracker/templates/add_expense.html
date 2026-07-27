@@ -1,0 +1,3431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Expense — Settlé</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+<style>
+
+/* =========================================================
+   SETTLÉ — ADD EXPENSE PAGE
+   PLUM & MINT / CREAM PREMIUM THEME
+   RECEIPT / TICKET SIGNATURE STYLE
+   DJANGO LOGIC PRESERVED
+========================================================= */
+
+
+/* =========================================================
+   ROOT VARIABLES
+========================================================= */
+
+:root {
+
+    --mint: #5FE0A8;
+    --mint-dark: #3DC48C;
+    --mint-deep: #279A6C;
+
+    --mint-light: #E3FBF0;
+    --mint-soft: #F1FDF7;
+
+    --plum: #3B1F3A;
+    --plum-deep: #26132A;
+
+    --white: #FFFFFF;
+
+    --page-bg: #F7F5EE;
+    --sidebar-bg: #FBFAF4;
+    --main-bg: #FFFFFF;
+
+    --text: #1B1D18;
+    --muted: #6E7268;
+    --faint: #A7ABA0;
+
+    --border: #E7E3D6;
+
+    --coral: #E07A4F;
+    --coral-soft: #FCEBE2;
+
+    --gold: #D29F2E;
+    --gold-soft: #FBF1DC;
+
+    --sun: #FFC857;
+
+    --ink: #1B1D18;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    font-family:
+        'Inter',
+        sans-serif;
+
+    background:
+
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(95,224,168,0.16),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(95,224,168,0.12),
+            transparent 25%
+        ),
+
+        linear-gradient(
+            180deg,
+            #FBFAF4,
+            var(--page-bg) 45%,
+            #F2EFE4
+        );
+
+    color:
+        var(--text);
+
+    min-height:
+        100vh;
+
+    padding:
+        24px;
+
+}
+
+
+a {
+
+    text-decoration:
+        none;
+
+    color:
+        inherit;
+
+}
+
+
+button,
+input,
+select {
+
+    font-family:
+        inherit;
+
+}
+
+
+h1,
+h2,
+h3,
+h4 {
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+}
+
+
+::selection {
+
+    background:
+        var(--mint);
+
+    color:
+        var(--plum-deep);
+
+}
+
+
+:focus-visible {
+
+    outline:
+        2px solid var(--mint-dark);
+
+    outline-offset:
+        2px;
+
+    border-radius:
+        6px;
+
+}
+
+
+/* =========================================================
+   MONEY / RECEIPT TYPEFACE
+========================================================= */
+
+.ticket-num {
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-variant-numeric:
+        tabular-nums;
+
+}
+
+
+/* =========================================================
+   ENTRANCE ANIMATION
+========================================================= */
+
+@keyframes fadeUp {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(10px);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+.page-header,
+.form-card,
+.info-card {
+
+    animation:
+        fadeUp 0.5s ease both;
+
+}
+
+
+.page-header {
+
+    animation-delay:
+        0s;
+
+}
+
+
+.form-card {
+
+    animation-delay:
+        0.07s;
+
+}
+
+
+.right .info-card:nth-of-type(1) {
+
+    animation-delay:
+        0.10s;
+
+}
+
+
+.right .info-card:nth-of-type(2) {
+
+    animation-delay:
+        0.15s;
+
+}
+
+
+.right .info-card:nth-of-type(3) {
+
+    animation-delay:
+        0.20s;
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            0.001ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.001ms !important;
+
+        scroll-behavior:
+            auto !important;
+
+    }
+
+}
+
+
+/* =========================================================
+   MAIN APP SHELL
+========================================================= */
+
+.shell {
+
+    width:
+        100%;
+
+    max-width:
+        1500px;
+
+    min-height:
+        calc(100vh - 48px);
+
+    margin:
+        auto;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        210px
+        minmax(0, 1fr)
+        250px;
+
+    background:
+        var(--main-bg);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        26px;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+
+        0 30px 80px
+        rgba(38,19,42,0.14);
+
+}
+
+
+/* =========================================================
+   LEFT SIDEBAR
+========================================================= */
+
+.side {
+
+    position:
+        relative;
+
+    padding:
+        32px 20px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            var(--plum),
+            var(--plum-deep)
+        );
+
+    overflow:
+        hidden;
+
+}
+
+
+.side::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        220px;
+
+    height:
+        220px;
+
+    top:
+        -100px;
+
+    left:
+        -100px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(95,224,168,0.10);
+
+}
+
+
+.side::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        300px;
+
+    height:
+        300px;
+
+    left:
+        -110px;
+
+    bottom:
+        -120px;
+
+    border-radius:
+        50%;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(95,224,168,0.22),
+            transparent 68%
+        );
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.side-brand {
+
+    position:
+        relative;
+
+    z-index:
+        5;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        45px;
+
+    color:
+        #FFFFFF;
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        1.05rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.02em;
+
+}
+
+
+.side-brand-mark {
+
+    width:
+        36px;
+
+    height:
+        36px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        12px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.95rem;
+
+    font-weight:
+        800;
+
+    box-shadow:
+
+        0 8px 20px
+        rgba(0,0,0,0.22);
+
+    transform:
+        rotate(-4deg);
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+
+.side-brand:hover .side-brand-mark {
+
+    transform:
+        rotate(4deg) scale(1.05);
+
+}
+
+
+/* =========================================================
+   SIDEBAR LABEL
+========================================================= */
+
+.side-label {
+
+    position:
+        relative;
+
+    z-index:
+        3;
+
+    margin:
+        22px 12px 11px;
+
+    color:
+        rgba(255,255,255,0.45);
+
+    font-size:
+        0.70rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.09em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+/* =========================================================
+   SIDEBAR ITEMS
+========================================================= */
+
+.side-item {
+
+    position:
+        relative;
+
+    z-index:
+        3;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    width:
+        100%;
+
+    padding:
+        10px 12px;
+
+    margin-bottom:
+        5px;
+
+    border-radius:
+        13px;
+
+    color:
+        rgba(255,255,255,0.68);
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        500;
+
+    transition:
+        all 0.22s ease;
+
+}
+
+
+.side-item:hover {
+
+    color:
+        #FFFFFF;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    transform:
+        translateX(3px);
+
+}
+
+
+.side-dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        currentColor;
+
+    flex-shrink:
+        0;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.side-item:hover .side-dot {
+
+    transform:
+        scale(1.4);
+
+}
+
+
+/* =========================================================
+   ACTIVE EXPENSE ITEM
+========================================================= */
+
+.side-item.active {
+
+    color:
+        var(--plum-deep);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    box-shadow:
+
+        0 8px 20px
+        rgba(0,0,0,0.20);
+
+    font-weight:
+        700;
+
+}
+
+
+.side-item.active::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    right:
+        9px;
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--plum-deep);
+
+    opacity:
+        0.55;
+
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.main {
+
+    min-width:
+        0;
+
+    padding:
+        30px;
+
+    background:
+        var(--main-bg);
+
+    overflow-y:
+        auto;
+
+    overflow-x:
+        hidden;
+
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        16px;
+
+    margin-bottom:
+        25px;
+
+}
+
+
+.topbar-search {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+    max-width:
+        400px;
+
+    height:
+        38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    padding:
+        0 17px;
+
+    background:
+        var(--mint-soft);
+
+    border:
+        1px solid
+        var(--mint-light);
+
+    border-radius:
+        20px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.84rem;
+
+    overflow:
+        hidden;
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+
+.topbar-search::before {
+
+    content:
+        "⌕";
+
+    margin-right:
+        9px;
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        1.05rem;
+
+    flex-shrink:
+        0;
+
+}
+
+
+.topbar-user {
+
+    margin-left:
+        auto;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    min-width:
+        0;
+
+    max-width:
+        45%;
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+
+.avatar {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        700;
+
+    box-shadow:
+        0 0 0 3px var(--mint-light),
+        0 0 0 4px var(--mint-dark);
+
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
+
+    position:
+        relative;
+
+    padding:
+        25px 28px;
+
+    margin-bottom:
+        22px;
+
+    border-radius:
+        20px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--plum),
+            var(--plum-deep)
+        );
+
+    color:
+        #FFFFFF;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+
+        0 18px 40px
+        rgba(38,19,42,0.20);
+
+}
+
+
+.page-header::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        240px;
+
+    height:
+        240px;
+
+    right:
+        -90px;
+
+    top:
+        -120px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255,200,87,0.14);
+
+}
+
+
+.page-header::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        200px;
+
+    height:
+        200px;
+
+    left:
+        -110px;
+
+    bottom:
+        -120px;
+
+    border-radius:
+        50%;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(95,224,168,0.20),
+            transparent 70%
+        );
+
+}
+
+
+/* =========================================================
+   HEADER EYEBROW
+========================================================= */
+
+.header-eyebrow {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        5px 12px;
+
+    margin-bottom:
+        13px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.16);
+
+    border-radius:
+        20px;
+
+    background:
+        rgba(255,255,255,0.10);
+
+    color:
+        var(--mint);
+
+    font-size:
+        0.74rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.04em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.header-eyebrow .dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--sun);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(255,200,87,0.22);
+
+}
+
+
+.page-header h1 {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    font-size:
+        1.5rem;
+
+    line-height:
+        1.3;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.03em;
+
+    margin-bottom:
+        7px;
+
+}
+
+
+.page-header p {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    color:
+        rgba(255,255,255,0.62);
+
+    font-size:
+        0.86rem;
+
+    line-height:
+        1.55;
+
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+.error-message {
+
+    padding:
+        12px 15px;
+
+    margin-bottom:
+        18px;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--coral-soft);
+
+    color:
+        var(--coral);
+
+    border:
+        1px solid
+        rgba(224,122,79,0.20);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        600;
+
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.form-card {
+
+    position:
+        relative;
+
+    padding:
+        24px 24px 34px;
+
+    background:
+        var(--sidebar-bg);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        20px 20px 6px 6px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(38,19,42,0.03);
+
+}
+
+
+/* =========================================================
+   RECEIPT PERFORATION
+========================================================= */
+
+.form-card::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        14px;
+
+    right:
+        14px;
+
+    bottom:
+        6px;
+
+    height:
+        12px;
+
+    background-image:
+
+        radial-gradient(
+            circle at 6px 6px,
+            var(--main-bg) 5px,
+            transparent 5.5px
+        );
+
+    background-size:
+        16px 12px;
+
+    background-repeat:
+        repeat-x;
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.form-group {
+
+    margin-bottom:
+        18px;
+
+}
+
+
+.form-group label {
+
+    display:
+        block;
+
+    margin-bottom:
+        7px;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        700;
+
+}
+
+
+.form-group input,
+.form-group select {
+
+    width:
+        100%;
+
+    height:
+        43px;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        11px;
+
+    background:
+        white;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.78rem;
+
+    transition:
+        all 0.2s ease;
+
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+
+    outline:
+        none;
+
+    border-color:
+        var(--mint-dark);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(95,224,168,0.14);
+
+}
+
+
+/* =========================================================
+   AMOUNT FIELD
+========================================================= */
+
+.amount-field {
+
+    position:
+        relative;
+
+}
+
+
+.amount-field .rupee-chip {
+
+    position:
+        absolute;
+
+    left:
+        11px;
+
+    top:
+        50%;
+
+    transform:
+        translateY(-50%);
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        23px;
+
+    height:
+        23px;
+
+    border-radius:
+        7px;
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        800;
+
+    pointer-events:
+        none;
+
+}
+
+
+.amount-field input {
+
+    padding-left:
+        44px;
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        0.01em;
+
+}
+
+
+/* =========================================================
+   SPLIT DROPDOWN
+========================================================= */
+
+.split-select-wrapper {
+
+    position:
+        relative;
+
+}
+
+
+.split-select-wrapper select {
+
+    appearance:
+        none;
+
+    cursor:
+        pointer;
+
+    padding-right:
+        40px;
+
+}
+
+
+.split-select-wrapper::after {
+
+    content:
+        "▼";
+
+    position:
+        absolute;
+
+    right:
+        15px;
+
+    top:
+        50%;
+
+    transform:
+        translateY(-50%);
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.55rem;
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   SPLIT INFORMATION BOX
+========================================================= */
+
+.split-box {
+
+    padding:
+        17px;
+
+    margin-top:
+        5px;
+
+    margin-bottom:
+        20px;
+
+    border:
+        1px solid
+        var(--mint-light);
+
+    border-radius:
+        15px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint-soft),
+            var(--mint-light)
+        );
+
+}
+
+
+.split-box p {
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.75rem;
+
+    line-height:
+        1.5;
+
+    margin-bottom:
+        12px;
+
+}
+
+
+.split-box ul {
+
+    list-style:
+        none;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        2px;
+
+}
+
+
+.split-box li {
+
+    display:
+        flex;
+
+    align-items:
+        baseline;
+
+    gap:
+        8px;
+
+    padding:
+        7px 2px;
+
+    color:
+        var(--ink);
+
+    font-size:
+        0.76rem;
+
+    font-weight:
+        600;
+
+}
+
+
+.split-box li::after {
+
+    content:
+        "";
+
+    flex:
+        1;
+
+    border-bottom:
+        1.5px dotted
+        rgba(39,154,108,0.35);
+
+    margin-bottom:
+        3px;
+
+}
+
+
+.split-box li .share-tag {
+
+    order:
+        3;
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        700;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.03em;
+
+}
+
+
+/* =========================================================
+   CUSTOM CONTRIBUTION BOX
+========================================================= */
+
+#custom_box {
+
+    padding:
+        17px;
+
+    margin-top:
+        5px;
+
+    margin-bottom:
+        20px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        15px;
+
+    background:
+        #FAF9F2;
+
+}
+
+
+#custom_box p {
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.75rem;
+
+    line-height:
+        1.5;
+
+    margin-bottom:
+        12px;
+
+}
+
+
+.custom-member {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        140px;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        9px;
+
+}
+
+
+.custom-member label {
+
+    color:
+        var(--text);
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        600;
+
+}
+
+
+.custom-member input {
+
+    width:
+        100%;
+
+    height:
+        38px;
+
+    padding:
+        0 11px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        10px;
+
+    background:
+        white;
+
+    color:
+        var(--text);
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-weight:
+        500;
+
+    font-size:
+        0.75rem;
+
+}
+
+
+.custom-member input:focus {
+
+    outline:
+        none;
+
+    border-color:
+        var(--mint-dark);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(95,224,168,0.12);
+
+}
+
+
+/* =========================================================
+   CUSTOM TOTAL
+========================================================= */
+
+#custom_total_msg {
+
+    margin-top:
+        14px;
+
+    padding:
+        11px 12px;
+
+    border-top:
+        3px double
+        rgba(39,154,108,0.30);
+
+    background:
+        white;
+
+    border-radius:
+        0 0 9px 9px;
+
+    color:
+        var(--mint-deep);
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-size:
+        0.74rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.5;
+
+}
+
+
+/* =========================================================
+   MOBILE INLINE TIPS
+========================================================= */
+
+.mobile-tip {
+
+    display:
+        none;
+
+    padding:
+        11px 13px;
+
+    margin-top:
+        -8px;
+
+    margin-bottom:
+        18px;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.72rem;
+
+    line-height:
+        1.55;
+
+    font-weight:
+        500;
+
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+========================================================= */
+
+.form-actions {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        9px;
+
+    margin-top:
+        8px;
+
+    padding-top:
+        19px;
+
+    background:
+
+        repeating-linear-gradient(
+            to right,
+            #D7D2C1 0,
+            #D7D2C1 6px,
+            transparent 6px,
+            transparent 13px
+        )
+        top / 100% 1.5px
+        no-repeat;
+
+}
+
+
+.btn {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width:
+        120px;
+
+    min-height:
+        42px;
+
+    padding:
+        10px 19px;
+
+    border:
+        none;
+
+    border-radius:
+        20px;
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        all 0.25s ease;
+
+}
+
+
+.btn:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.btn-save {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--mint-dark)
+        );
+
+    color:
+        var(--plum-deep);
+
+    box-shadow:
+
+        0 7px 17px
+        rgba(0,0,0,0.16);
+
+}
+
+
+.btn-cancel {
+
+    background:
+        white;
+
+    color:
+        var(--muted);
+
+    border:
+        1px solid
+        var(--border);
+
+}
+
+
+.btn-cancel:hover {
+
+    color:
+        var(--mint-deep);
+
+    border-color:
+        var(--mint-dark);
+
+}
+
+
+/* =========================================================
+   RIGHT SIDEBAR
+========================================================= */
+
+.right {
+
+    padding:
+        30px 17px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            var(--sidebar-bg),
+            #F5F2E7
+        );
+
+    border-left:
+        1px solid
+        var(--border);
+
+    overflow-y:
+        auto;
+
+    overflow-x:
+        hidden;
+
+}
+
+
+.info-card {
+
+    position:
+        relative;
+
+    padding:
+        18px 18px 18px 44px;
+
+    margin-bottom:
+        18px;
+
+    background:
+        rgba(255,255,255,0.75);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        18px;
+
+}
+
+
+.info-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        18px;
+
+    top:
+        20px;
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+    border-radius:
+        3px;
+
+    background:
+        var(--mint);
+
+    box-shadow:
+        0 0 0 3px
+        var(--mint-light);
+
+}
+
+
+.info-card h3 {
+
+    font-size:
+        0.86rem;
+
+    margin-bottom:
+        12px;
+
+}
+
+
+.info-card p {
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.72rem;
+
+    line-height:
+        1.65;
+
+}
+
+
+.tip {
+
+    padding:
+        12px;
+
+    margin-top:
+        12px;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.68rem;
+
+    line-height:
+        1.5;
+
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+}
+
+
+::-webkit-scrollbar-track {
+
+    background:
+        transparent;
+
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        #C9EBDA;
+
+    border-radius:
+        10px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media(max-width:1150px) {
+
+    .shell {
+
+        grid-template-columns:
+            190px
+            minmax(0,1fr);
+
+    }
+
+
+    .right {
+
+        display:
+            none;
+
+    }
+
+
+    .mobile-tip {
+
+        display:
+            block;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — SMALL TABLET
+========================================================= */
+
+@media(max-width:800px) {
+
+    body {
+
+        padding:
+            10px;
+
+    }
+
+
+    .shell {
+
+        display:
+            block;
+
+        min-height:
+            auto;
+
+        border-radius:
+            18px;
+
+    }
+
+
+    /* MOBILE / TABLET SIDEBAR */
+
+    .side {
+
+        display:
+            flex;
+
+        flex-wrap:
+            wrap;
+
+        align-items:
+            center;
+
+        gap:
+            6px;
+
+        padding:
+            16px;
+
+        overflow:
+            hidden;
+
+    }
+
+
+    .side-brand {
+
+        width:
+            100%;
+
+        margin-bottom:
+            10px;
+
+    }
+
+
+    .side-label {
+
+        display:
+            none;
+
+    }
+
+
+    .side-item {
+
+        display:
+            inline-flex;
+
+        width:
+            auto;
+
+        margin-bottom:
+            0;
+
+        padding:
+            9px 11px;
+
+        font-size:
+            0.76rem;
+
+    }
+
+
+    .side-item.active::after {
+
+        display:
+            none;
+
+    }
+
+
+    /* MAIN */
+
+    .main {
+
+        padding:
+            20px;
+
+        overflow:
+            visible;
+
+    }
+
+
+    .topbar {
+
+        margin-bottom:
+            20px;
+
+    }
+
+
+    .page-header {
+
+        padding:
+            22px;
+
+    }
+
+
+    .form-card {
+
+        padding:
+            20px 18px 30px;
+
+    }
+
+
+    .custom-member {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            5px;
+
+    }
+
+
+    .custom-member label {
+
+        margin-bottom:
+            2px;
+
+    }
+
+
+    .custom-member input {
+
+        height:
+            42px;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media(max-width:550px) {
+
+    body {
+
+        padding:
+            6px;
+
+    }
+
+
+    .shell {
+
+        border-radius:
+            16px;
+
+    }
+
+
+    .side {
+
+        padding:
+            14px;
+
+        gap:
+            5px;
+
+    }
+
+
+    .side-brand {
+
+        margin-bottom:
+            8px;
+
+    }
+
+
+    .side-item {
+
+        padding:
+            8px 10px;
+
+        border-radius:
+            11px;
+
+        font-size:
+            0.72rem;
+
+    }
+
+
+    .side-dot {
+
+        width:
+            5px;
+
+        height:
+            5px;
+
+    }
+
+
+    .main {
+
+        padding:
+            15px;
+
+    }
+
+
+    /* TOP BAR */
+
+    .topbar {
+
+        flex-wrap:
+            wrap;
+
+        gap:
+            12px;
+
+    }
+
+
+    .topbar-user {
+
+        max-width:
+            100%;
+
+        margin-left:
+            auto;
+
+        font-size:
+            0.75rem;
+
+    }
+
+
+    .avatar {
+
+        width:
+            34px;
+
+        height:
+            34px;
+
+        box-shadow:
+            0 0 0 2px var(--mint-light),
+            0 0 0 3px var(--mint-dark);
+
+    }
+
+
+    .topbar-search {
+
+        order:
+            3;
+
+        width:
+            100%;
+
+        max-width:
+            none;
+
+        height:
+            40px;
+
+    }
+
+
+    /* HEADER */
+
+    .page-header {
+
+        padding:
+            20px;
+
+        margin-bottom:
+            18px;
+
+        border-radius:
+            16px;
+
+    }
+
+
+    .header-eyebrow {
+
+        font-size:
+            0.67rem;
+
+        padding:
+            5px 10px;
+
+    }
+
+
+    .page-header h1 {
+
+        font-size:
+            1.16rem;
+
+        line-height:
+            1.35;
+
+    }
+
+
+    .page-header p {
+
+        font-size:
+            0.76rem;
+
+        line-height:
+            1.55;
+
+    }
+
+
+    /* FORM */
+
+    .form-card {
+
+        padding:
+            18px 15px 28px;
+
+        border-radius:
+            16px 16px 6px 6px;
+
+    }
+
+
+    .form-group {
+
+        margin-bottom:
+            16px;
+
+    }
+
+
+    .form-group label {
+
+        font-size:
+            0.76rem;
+
+    }
+
+
+    .form-group input,
+    .form-group select {
+
+        height:
+            44px;
+
+        font-size:
+            0.78rem;
+
+    }
+
+
+    /* SPLIT BOX */
+
+    .split-box {
+
+        padding:
+            14px;
+
+    }
+
+
+    .split-box li {
+
+        flex-wrap:
+            wrap;
+
+        gap:
+            5px;
+
+    }
+
+
+    .split-box li::after {
+
+        display:
+            none;
+
+    }
+
+
+    .split-box li .share-tag {
+
+        width:
+            100%;
+
+        margin-top:
+            1px;
+
+        font-size:
+            0.62rem;
+
+    }
+
+
+    /* CUSTOM BOX */
+
+    #custom_box {
+
+        padding:
+            14px;
+
+    }
+
+
+    .custom-member {
+
+        margin-bottom:
+            13px;
+
+    }
+
+
+    .custom-member input {
+
+        height:
+            42px;
+
+        font-size:
+            0.76rem;
+
+    }
+
+
+    /* BUTTONS */
+
+    .form-actions {
+
+        flex-direction:
+            column;
+
+        gap:
+            10px;
+
+    }
+
+
+    .btn {
+
+        width:
+            100%;
+
+        min-height:
+            44px;
+
+    }
+
+
+    /* MOBILE TIPS */
+
+    .mobile-tip {
+
+        font-size:
+            0.70rem;
+
+    }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL MOBILE
+========================================================= */
+
+@media(max-width:380px) {
+
+    .main {
+
+        padding:
+            12px;
+
+    }
+
+
+    .side {
+
+        padding:
+            12px;
+
+    }
+
+
+    .side-item {
+
+        padding:
+            7px 8px;
+
+        font-size:
+            0.67rem;
+
+    }
+
+
+    .page-header {
+
+        padding:
+            17px;
+
+    }
+
+
+    .page-header h1 {
+
+        font-size:
+            1.05rem;
+
+    }
+
+
+    .form-card {
+
+        padding:
+            16px 12px 26px;
+
+    }
+
+
+    .topbar-user {
+
+        font-size:
+            0.68rem;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="shell">
+
+
+<!-- =========================================================
+     LEFT SIDEBAR
+========================================================= -->
+
+<div class="side">
+
+
+    <div class="side-brand">
+
+        <div class="side-brand-mark">
+            S
+        </div>
+
+        Settlé
+
+    </div>
+
+
+    <div class="side-label">
+        Group
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        Dashboard
+
+    </div>
+
+
+    <div class="side-item active">
+
+        <span class="side-dot"></span>
+
+        Expenses
+
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        Payments
+
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        Chat
+
+    </div>
+
+
+    <div class="side-label">
+        Info
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        {{ group.group_name }}
+
+    </div>
+
+
+    <div class="side-item">
+
+        <span class="side-dot"></span>
+
+        Code: {{ group.invite_code }}
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<div class="main">
+
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+
+        <div class="topbar-search">
+
+            {{ group.description }}
+
+        </div>
+
+
+        <div class="topbar-user">
+
+
+            <div class="avatar">
+
+                {{ my_email|slice:":2"|upper }}
+
+            </div>
+
+
+            {{ my_email }}
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div class="header-eyebrow">
+
+            <span class="dot"></span>
+
+            New transaction
+
+        </div>
+
+        <h1>
+
+            Add Expense to {{ group.group_name }}
+
+        </h1>
+
+        <p>
+
+            Add a new expense and choose how the cost should be shared with your group.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- ERROR -->
+
+    {% if error %}
+
+        <div class="error-message">
+
+            {{ error }}
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- FORM CARD -->
+
+    <div class="form-card">
+
+
+        <!-- =================================================
+             ORIGINAL DJANGO FORM
+             LOGIC PRESERVED
+        ================================================== -->
+
+
+        <form
+            method="POST"
+            action="{% url 'add_expense' %}"
+            onsubmit="return validateForm()"
+        >
+
+
+            {% csrf_token %}
+
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label>
+                    Description
+                </label>
+
+                <input
+                    type="text"
+                    name="description"
+                    placeholder="e.g. Dinner, Movie tickets, Groceries..."
+                    required
+                >
+
+            </div>
+
+
+
+            <!-- TOTAL AMOUNT -->
+
+            <div class="form-group">
+
+                <label>
+                    Total Amount (Rupees)
+                </label>
+
+                <div class="amount-field">
+
+                    <span class="rupee-chip">&#8377;</span>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="amount"
+                        id="total_amount"
+                        placeholder="0.00"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DATE -->
+
+            <div class="form-group">
+
+                <label>
+                    Date and Time (optional)
+                </label>
+
+                <input
+                    type="datetime-local"
+                    name="expense_date"
+                >
+
+            </div>
+
+
+
+            <!-- SPLIT TYPE -->
+
+            <div class="form-group">
+
+                <label>
+                    How to Split
+                </label>
+
+
+                <div class="split-select-wrapper">
+
+                    <select
+                        name="split_type"
+                        id="split_type"
+                        onchange="showRightBox()"
+                    >
+
+                        <option value="equal">
+                            Split Equally
+                        </option>
+
+                        <option value="custom">
+                            Split Custom
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 EQUAL SPLIT
+            ================================================== -->
+
+            <div
+                id="equal_box"
+                class="split-box"
+            >
+
+                <p>
+
+                    Money will be shared equally between everyone:
+
+                </p>
+
+
+                <ul>
+
+                    {% for profile in members_list %}
+
+                        <li>
+
+                            {{ profile.name }}
+
+                            <span class="share-tag">
+                                Equal share
+                            </span>
+
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+            <!-- MOBILE INLINE TIP -->
+
+            <div class="mobile-tip">
+
+                💡 Equal split automatically divides the expense among everyone.
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CUSTOM SPLIT
+            ================================================== -->
+
+            <div
+                id="custom_box"
+                style="display: none;"
+            >
+
+                <p>
+
+                    Type how much each person should pay:
+
+                </p>
+
+
+                {% for profile in members_list %}
+
+
+                    <div class="custom-member">
+
+
+                        <label>
+
+                            {{ profile.name }}
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            class="contribution_box"
+                            name="contribution_{{ profile.profile_id }}"
+                            placeholder="₹ Amount"
+                        >
+
+
+                    </div>
+
+
+                {% endfor %}
+
+
+                <p id="custom_total_msg"></p>
+
+
+            </div>
+
+
+            <!-- MOBILE INLINE TIP -->
+
+            <div class="mobile-tip">
+
+                ✓ Make sure all custom contributions add up to the total expense.
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BUTTONS
+            ================================================== -->
+
+            <div class="form-actions">
+
+
+                <button
+                    type="submit"
+                    class="btn btn-save"
+                >
+
+                    Save expense
+
+                </button>
+
+
+                <a
+                    href="{% url 'group_home' %}"
+                    class="btn btn-cancel"
+                >
+
+                    Cancel
+
+                </a>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     RIGHT SIDEBAR
+========================================================= -->
+
+<div class="right">
+
+
+    <div class="info-card">
+
+
+        <h3>
+
+            Expense Guide
+
+        </h3>
+
+
+        <p>
+
+            Add the total amount you spent and choose how you want the expense to be divided among your group members.
+
+        </p>
+
+
+        <div class="tip">
+
+            💡 Equal split automatically divides the expense among everyone.
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="info-card">
+
+
+        <h3>
+
+            Custom Split
+
+        </h3>
+
+
+        <p>
+
+            Choose custom split when each person needs to contribute a different amount.
+
+        </p>
+
+
+        <div class="tip">
+
+            ✓ Make sure all custom contributions add up to the total expense.
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="info-card">
+
+
+        <h3>
+
+            Group
+
+        </h3>
+
+
+        <p>
+
+            {{ group.group_name }}
+
+        </p>
+
+
+        <div class="tip">
+
+            Group Code: {{ group.invite_code }}
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     ORIGINAL JAVASCRIPT
+     LOGIC PRESERVED
+========================================================= -->
+
+<script>
+
+
+function showRightBox() {
+
+
+    // find out what the user picked
+
+    var pickedOption =
+        document.getElementById('split_type').value;
+
+
+    // find our two boxes
+
+    var equalBox =
+        document.getElementById('equal_box');
+
+    var customBox =
+        document.getElementById('custom_box');
+
+
+    // if user picked custom, show custom box and hide equal box
+
+    if (pickedOption == 'custom') {
+
+        equalBox.style.display =
+            'none';
+
+        customBox.style.display =
+            'block';
+
+    }
+
+
+    // if user picked equal, show equal box and hide custom box
+
+    else {
+
+        equalBox.style.display =
+            'block';
+
+        customBox.style.display =
+            'none';
+
+    }
+
+}
+
+
+// this runs right before the form is submitted
+
+function validateForm() {
+
+
+    var pickedOption =
+        document.getElementById('split_type').value;
+
+
+    // only need to check custom split, equal split is always safe
+
+    if (pickedOption != 'custom') {
+
+        return true;
+
+    }
+
+
+    var totalAmount =
+        parseFloat(
+            document.getElementById('total_amount').value
+        );
+
+
+    if (isNaN(totalAmount)) {
+
+        alert(
+            'Please enter a valid total amount.'
+        );
+
+        return false;
+
+    }
+
+
+    // add up everything typed in the contribution boxes
+
+    var boxes =
+        document.getElementsByClassName(
+            'contribution_box'
+        );
+
+
+    var addedUp =
+        0;
+
+
+    for (
+        var i = 0;
+        i < boxes.length;
+        i++
+    ) {
+
+
+        var typedValue =
+            parseFloat(
+                boxes[i].value
+            );
+
+
+        if (!isNaN(typedValue)) {
+
+            addedUp =
+                addedUp + typedValue;
+
+        }
+
+    }
+
+
+    // allow a tiny rounding gap (1 paisa) since these are decimals
+
+    var difference =
+        Math.abs(
+            addedUp - totalAmount
+        );
+
+
+    if (difference > 0.01) {
+
+
+        alert(
+            'Custom contributions (₹' +
+            addedUp.toFixed(2) +
+            ') must add up to the total amount (₹' +
+            totalAmount.toFixed(2) +
+            ').'
+        );
+
+
+        return false;
+
+    }
+
+
+    // everything checks out, let the form submit
+
+    return true;
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
