@@ -662,6 +662,131 @@ h4 {
 
 
 /* =========================================================
+   MOBILE INVITE CODE
+   (visible only on mobile, since .side is hidden there)
+========================================================= */
+
+.mobile-invite {
+
+    display:
+        none;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin-bottom:
+        16px;
+
+    padding:
+        10px
+        14px;
+
+    border-radius:
+        13px;
+
+    background:
+        var(--mint-soft);
+
+    border:
+        1px dashed
+        var(--mint-dark);
+
+}
+
+.mobile-invite .plane {
+
+    flex-shrink:
+        0;
+
+    width:
+        26px;
+
+    height:
+        26px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--mint);
+
+    color:
+        var(--plum-deep);
+
+    font-size:
+        0.80rem;
+
+    transform:
+        rotate(45deg);
+
+}
+
+.mobile-invite-copy {
+
+    min-width:
+        0;
+
+}
+
+.mobile-invite-label {
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.06em;
+
+    text-transform:
+        uppercase;
+
+}
+
+.mobile-invite-code {
+
+    color:
+        var(--mint-deep);
+
+    font-family:
+        'IBM Plex Mono',
+        monospace;
+
+    font-size:
+        0.92rem;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+
+/* =========================================================
    MAIN
 ========================================================= */
 
@@ -3262,6 +3387,16 @@ button.mini {
     }
 
 
+    /* Show mobile invite chip */
+
+    .mobile-invite {
+
+        display:
+            flex;
+
+    }
+
+
     /* Top mobile header */
 
     .topbar {
@@ -4276,6 +4411,32 @@ button.mini {
 
         </div>
 
+
+    </div>
+
+
+
+    <!-- MOBILE INVITE CODE (hidden on desktop, shown ≤768px) -->
+
+    <div class="mobile-invite">
+
+        <span class="plane">
+            ✈
+        </span>
+
+        <div class="mobile-invite-copy">
+
+            <div class="mobile-invite-label">
+                Invite code
+            </div>
+
+            <div class="mobile-invite-code">
+
+                {{ group.invite_code }}
+
+            </div>
+
+        </div>
 
     </div>
 
