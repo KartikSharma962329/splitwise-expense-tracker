@@ -832,6 +832,90 @@ h4 {
 
 }
 
+/* =========================================================
+   BACK TO DASHBOARD BUTTON
+========================================================= */
+
+.back-btn {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        6px;
+
+    flex-shrink:
+        0;
+
+    height:
+        38px;
+
+    padding:
+        0
+        14px;
+
+    border-radius:
+        20px;
+
+    background:
+        var(--mint-soft);
+
+    border:
+        1px solid
+        var(--mint-light);
+
+    color:
+        var(--mint-deep);
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+
+    transition:
+        all
+        0.22s
+        ease;
+
+}
+
+.back-btn:hover {
+
+    background:
+        var(--mint-light);
+
+    transform:
+        translateX(-2px);
+
+}
+
+.back-btn .arrow-ico {
+
+    font-size:
+        0.95rem;
+
+    line-height:
+        1;
+
+}
+
+.back-btn .back-label {
+
+    display:
+        inline;
+
+}
+
 .topbar-search {
 
     flex:
@@ -3445,6 +3529,29 @@ button.mini {
 
     }
 
+    .back-btn {
+
+        width:
+            40px;
+
+        height:
+            40px;
+
+        padding:
+            0;
+
+        border-radius:
+            50%;
+
+    }
+
+    .back-btn .back-label {
+
+        display:
+            none;
+
+    }
+
     .topbar-search {
 
         order:
@@ -4387,6 +4494,19 @@ button.mini {
     <!-- TOP BAR -->
 
     <div class="topbar">
+
+
+        <a
+            href="{% url 'member_home' %}"
+            class="back-btn"
+            title="Back to your groups"
+        >
+
+            <span class="arrow-ico">←</span>
+
+            <span class="back-label">Home</span>
+
+        </a>
 
 
         <div class="topbar-search">
