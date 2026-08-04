@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'anymail',
     'tracker',
 ]
 
@@ -128,13 +129,21 @@ STORAGES = {
 
 
 # Email configuration (used for sending password reset OTPs)
+#
+# Render blocks outbound SMTP ports (25, 465, 587) on free web services, and
+# even on paid tiers port 25 stays blocked. To avoid that entirely, email is
+# sent via Resend's HTTP API (port 443, never blocked) using django-anymail.
+#
 # Values are read from environment variables / .env — never hardcode real
 # credentials here since this file is likely committed to version control.
+#
+# Requires: pip install django-anymail
+# Set RESEND_API_KEY in your environment (Render dashboard -> Environment tab)
 
-EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
-EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
-EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
+
+ANYMAIL = {
+    'RESEND_API_KEY': config('RESEND_API_KEY', default=''),
+}
+
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='onboarding@resend.dev')
