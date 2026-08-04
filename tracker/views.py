@@ -5,6 +5,7 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+from django.core.mail import send_mail
 from .models import *
 
 
@@ -31,6 +32,95 @@ def login_view(request):
             return render(request, 'login.html', {'error': 'Invalid email or password'})
 
     return render(request, 'login.html')
+
+
+def generate_otp():
+    return ''.join(random.choices(string.digits, k=6))
+
+
+def forgot_password_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        if not LoginData.objects.filter(email=email).exists():
+            return render(request, 'forgot_password.html', {'error': 'No account found with that email'})
+
+        otp = generate_otp()
+
+        request.session['reset_email'] = email
+        request.session['reset_otp'] = otp
+        request.session['otp_created_at'] = timezone.now().isoformat()
+
+        send_mail(
+            subject='Settlé - Password Reset OTP',
+            message=f'Your OTP to reset your Settlé password is: {otp}\nThis code expires in 5 minutes.',
+            from_email=None,
+            recipient_list=[email],
+        )
+
+        return HttpResponseRedirect('/verify_otp/')
+
+    return render(request, 'forgot_password.html')
+
+
+def verify_otp_view(request):
+    email = request.session.get('reset_email')
+    if not email:
+        return HttpResponseRedirect('/forgot_password/')
+
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        correct_otp = request.session.get('reset_otp')
+        created_at_str = request.session.get('otp_created_at')
+
+        if not correct_otp or not created_at_str:
+            return HttpResponseRedirect('/forgot_password/')
+
+        created_at = timezone.datetime.fromisoformat(created_at_str)
+        is_expired = (timezone.now() - created_at).total_seconds() > 300
+
+        if is_expired:
+            return render(request, 'verify_otp.html', {'error': 'OTP expired. Please request a new one'})
+
+        if entered_otp != correct_otp:
+            return render(request, 'verify_otp.html', {'error': 'Invalid OTP'})
+
+        # clear the OTP so it can't be reused
+        del request.session['reset_otp']
+        del request.session['otp_created_at']
+        request.session['otp_verified'] = True
+
+        return HttpResponseRedirect('/reset_password/')
+
+    return render(request, 'verify_otp.html')
+
+
+def reset_password_view(request):
+    email = request.session.get('reset_email')
+    if not email or not request.session.get('otp_verified'):
+        return HttpResponseRedirect('/forgot_password/')
+
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+            return render(request, 'reset_password.html', {'error': "Passwords don't match"})
+
+        try:
+            user = LoginData.objects.get(email=email)
+        except LoginData.DoesNotExist:
+            return HttpResponseRedirect('/forgot_password/')
+
+        user.password = new_password
+        user.save()
+
+        del request.session['reset_email']
+        del request.session['otp_verified']
+
+        return render(request, 'login.html', {'error': 'Password reset successful. Please log in.'})
+
+    return render(request, 'reset_password.html')
 
 
 def userprofile_add(request):

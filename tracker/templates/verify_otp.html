@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — Settlé</title>
+<title>Verify OTP — Settlé</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
 /* =========================================================
-   SETTLÉ — LOGIN PAGE
+   SETTLÉ — VERIFY OTP PAGE
    PLUM + MINT, INK-ON-PAPER LEDGER MOTIF
    DJANGO LOGIC PRESERVED
 ========================================================= */
@@ -338,71 +338,30 @@ button, input { font-family: inherit; }
 }
 
 .login-form { width: 100%; }
-.form-group { width: 100%; margin-bottom: 19px; }
-.form-group label { display: block; margin-bottom: 7px; color: #363B36; font-size: 0.72rem; font-weight: 700; }
 
-.input-wrapper { position: relative; width: 100%; }
-
-.input-icon {
-    position: absolute;
-    left: 9px; top: 50%;
-    transform: translateY(-50%);
-    width: 28px; height: 28px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 8px;
-    background: var(--mint-light);
-    color: var(--mint-deep);
-    font-size: 0.74rem;
-    pointer-events: none;
-}
-
-.form-input {
-    display: block;
+.otp-input {
     width: 100%;
-    height: 53px;
-    padding: 0 46px 0 50px;
+    height: 64px;
+    padding: 0 20px;
+    text-align: center;
+    letter-spacing: 12px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--plum);
     border: 1px solid var(--border);
     border-radius: 13px;
     outline: none;
     background: #FCFCFA;
-    color: var(--text);
     font-family: 'Inter', sans-serif;
-    font-size: 0.82rem;
+    margin-bottom: 22px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
-.form-input::placeholder { color: var(--faint); }
-.form-input:focus {
+.otp-input::placeholder { color: var(--faint); letter-spacing: 12px; }
+.otp-input:focus {
     border-color: var(--mint-dark);
     background: var(--white);
     box-shadow: 0 0 0 4px rgba(79,200,146,0.12);
 }
-
-.toggle-visibility {
-    position: absolute;
-    right: 6px; top: 50%;
-    transform: translateY(-50%);
-    width: 34px; height: 34px;
-    display: flex; align-items: center; justify-content: center;
-    border: none; border-radius: 8px;
-    background: transparent;
-    color: var(--muted);
-    font-size: 0.68rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-}
-.toggle-visibility:hover { background: var(--mint-light); color: var(--mint-deep); }
-
-.forgot-link {
-    display: block;
-    margin-top: 8px;
-    text-align: right;
-    color: var(--mint-deep);
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-decoration: none;
-}
-.forgot-link:hover { color: var(--plum); text-decoration: underline; }
 
 .security-note {
     display: flex;
@@ -464,6 +423,7 @@ button, input { font-family: inherit; }
     .brand-stats { gap: 22px; }
     .login-panel { padding: 32px 22px 40px; }
     .login-title { font-size: 1.5rem; }
+    .otp-input { letter-spacing: 8px; font-size: 1.3rem; }
 }
 
 </style>
@@ -483,13 +443,13 @@ button, input { font-family: inherit; }
             </div>
 
             <h2 class="brand-headline">
-                Split bills.<br>
-                Settle up.<br>
-                <em>Stay friends.</em>
+                Check your<br>
+                inbox for<br>
+                <em>your code.</em>
             </h2>
 
             <p class="brand-description">
-                One place for your group's expenses, dues, and chat — no more spreadsheets or awkward reminders.
+                We've sent a 6-digit one-time code to your email. Enter it here to continue resetting your password.
             </p>
 
             <div class="ledger-ticker">
@@ -551,12 +511,12 @@ button, input { font-family: inherit; }
 
         <div class="brand-stats">
             <div>
-                <div class="stat-value">Zero</div>
-                <div class="stat-label">Awkward "you owe me" texts</div>
+                <div class="stat-value">6-digit</div>
+                <div class="stat-label">One-time verification code</div>
             </div>
             <div>
-                <div class="stat-value">100%</div>
-                <div class="stat-label">Transparent group dues</div>
+                <div class="stat-value">5 min</div>
+                <div class="stat-label">Before it expires</div>
             </div>
         </div>
 
@@ -567,18 +527,18 @@ button, input { font-family: inherit; }
         <div class="login-inner">
 
             <div class="panel-topbar">
-                <a href="{% url 'index' %}" class="back-link">← Back to Index</a>
-                <div class="floating-chip">Split with your group</div>
+                <a href="{% url 'forgot_password_view' %}" class="back-link">← Back</a>
+                <div class="floating-chip">Step 2 of 3</div>
             </div>
 
             <div class="eyebrow">
                 <span class="eyebrow-dot"></span>
-                Welcome back
+                Verify your identity
             </div>
 
-            <h1 class="login-title">Login to your account</h1>
+            <h1 class="login-title">Enter your OTP</h1>
 
-            <p class="login-subtitle">Welcome back! Sign in to keep track of your groups, expenses, and payments.</p>
+            <p class="login-subtitle">We've sent a 6-digit code to your email. It's valid for 5 minutes.</p>
 
             {% if error %}
                 <p class="error-message">
@@ -587,42 +547,26 @@ button, input { font-family: inherit; }
                 </p>
             {% endif %}
 
-            <form method="POST" action="{% url 'login_view' %}" class="login-form">
+            <form method="POST" action="{% url 'verify_otp_view' %}" class="login-form">
 
                 {% csrf_token %}
 
-                <div class="form-group">
-                    <label>Email:</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">✉</span>
-                        <input type="email" name="email" placeholder="Enter your email" class="form-input" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Password:</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">●</span>
-                        <input type="password" name="password" id="id_password" placeholder="Enter your password" class="form-input" required>
-                        <button type="button" class="toggle-visibility" id="togglePassword" aria-label="Show password">Show</button>
-                    </div>
-                    <a href="{% url 'forgot_password_view' %}" class="forgot-link">Forgot Password?</a>
-                </div>
+                <input type="text" name="otp" class="otp-input" maxlength="6" inputmode="numeric" placeholder="••••••" required>
 
                 <div class="security-note">
                     <span class="security-icon">✓</span>
-                    Your information is kept secure and private.
+                    Never share this code with anyone.
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="login-button">Login</button>
+                    <button type="submit" class="login-button">Verify OTP</button>
                 </div>
 
             </form>
 
             <p class="signup-text">
-                New to Settlé?
-                <a href="{% url 'userprofile_add' %}">Create an account</a>
+                Didn't get it?
+                <a href="{% url 'forgot_password_view' %}">Resend OTP</a>
             </p>
 
         </div>
@@ -630,21 +574,6 @@ button, input { font-family: inherit; }
     </div>
 
 </div>
-
-<script>
-(function () {
-    var toggleBtn = document.getElementById('togglePassword');
-    var passwordInput = document.getElementById('id_password');
-    if (!toggleBtn || !passwordInput) return;
-
-    toggleBtn.addEventListener('click', function () {
-        var isHidden = passwordInput.type === 'password';
-        passwordInput.type = isHidden ? 'text' : 'password';
-        toggleBtn.textContent = isHidden ? 'Hide' : 'Show';
-        toggleBtn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
-    });
-})();
-</script>
 
 </body>
 </html>
